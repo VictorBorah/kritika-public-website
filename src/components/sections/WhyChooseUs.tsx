@@ -42,17 +42,11 @@ export default function WhyChooseUs({ onOpenEnquiry }: WhyChooseUsProps) {
   return (
     <section
       id="why-choose-us"
-      className="pt-12 sm:pt-16 pb-20 sm:pb-28 relative bg-[#03060E] border-t border-white/10"
+      className="py-14 sm:py-20 relative bg-[#03060E] border-t border-white/10"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header with Motion Reveal */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3"
-        >
+        {/* Section Header — Always 100% visible, zero black empty delays */}
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14 space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-xs font-mono">
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>Showroom Advantage & Assurance</span>
@@ -65,24 +59,16 @@ export default function WhyChooseUs({ onOpenEnquiry }: WhyChooseUsProps) {
             </span>
           </h2>
 
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal">
             We bring together genuine vehicle options, hassle-free partner financing, and instant showroom handover under one seamless experience in Dhemaji.
           </p>
-        </motion.div>
+        </div>
 
         {/* 6 Feature Cards Grid — Dark Obsidian Background with High Legibility */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {SHOWROOM_FEATURES.map((feat, idx) => (
-            <motion.div
+          {SHOWROOM_FEATURES.map((feat) => (
+            <div
               key={feat.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{
-                duration: 0.5,
-                delay: idx * 0.08,
-                ease: [0.16, 1, 0.3, 1],
-              }}
               className="dark-automotive-card p-6 sm:p-7 flex flex-col justify-between group"
             >
               <div>
@@ -117,28 +103,22 @@ export default function WhyChooseUs({ onOpenEnquiry }: WhyChooseUsProps) {
                 <span className="text-emerald-400 font-medium">Showroom Standard</span>
                 <button
                   onClick={() => onOpenEnquiry(`Advantage Query: ${feat.title}`)}
-                  className="inline-flex items-center gap-1 text-slate-300 hover:text-white transition-colors group/btn"
+                  className="inline-flex items-center gap-1 text-slate-300 hover:text-white transition-colors group/btn cursor-pointer"
                 >
                   <span>Enquire</span>
                   <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-1" />
                 </button>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Asterisk Disclaimer Callout */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-10 p-4 rounded-xl bg-[#070C18] border border-white/10 text-center"
-        >
+        <div className="mt-10 p-4 rounded-xl bg-[#070C18] border border-white/10 text-center">
           <p className="text-xs text-slate-400 font-mono leading-relaxed max-w-4xl mx-auto">
             {DISCLAIMER_TEXT}
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
