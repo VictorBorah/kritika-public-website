@@ -75,24 +75,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
   useEffect(() => {
     let isCancelled = false;
 
-    // Load Frame 1 immediately
-    const firstImg = new window.Image();
-    firstImg.src = getFramePath(1);
-
-    const onFirstLoad = () => {
-      if (isCancelled) return;
-      imagesRef.current.set(1, firstImg);
-      drawFrame(1);
-      preloadRemainingFrames();
-    };
-
-    if (firstImg.complete) {
-      onFirstLoad();
-    } else {
-      firstImg.onload = onFirstLoad;
-    }
-
-    const preloadRemainingFrames = () => {
+    function preloadRemainingFrames() {
       const queue: number[] = [];
       // Pass 1: Every 2nd frame for rapid responsiveness
       for (let i = 2; i <= TOTAL_FRAMES; i += 2) queue.push(i);
@@ -119,7 +102,24 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
       };
 
       for (let c = 0; c < CONCURRENCY; c++) loadNext();
+    }
+
+    // Load Frame 1 immediately
+    const firstImg = new window.Image();
+    firstImg.src = getFramePath(1);
+
+    const onFirstLoad = () => {
+      if (isCancelled) return;
+      imagesRef.current.set(1, firstImg);
+      drawFrame(1);
+      preloadRemainingFrames();
     };
+
+    if (firstImg.complete) {
+      onFirstLoad();
+    } else {
+      firstImg.onload = onFirstLoad;
+    }
 
     return () => {
       isCancelled = true;
