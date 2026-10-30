@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import Image from "next/image";
 import { ArrowRight, Sparkles, BatteryCharging, Shield, Truck, HandCoins, ChevronDown, CheckCircle2, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -17,12 +18,10 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
   const currentFrameRef = useRef<number>(1);
   const isRenderingRef = useRef<boolean>(false);
   const touchStartYRef = useRef<number>(0);
-  const isCompletedRef = useRef<boolean>(false);
 
   const [frame, setFrame] = useState<number>(1);
   const [activeStage, setActiveStage] = useState<number>(0);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [isAnimationComplete, setIsAnimationComplete] = useState<boolean>(false);
+  const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
 
   // Format frame path: /frames/ezgif-frame-001.jpg
   const getFramePath = (index: number) => {
@@ -33,6 +32,8 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
   const paintImage = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, img: HTMLImageElement) => {
     const cw = canvas.width;
     const ch = canvas.height;
+    if (cw === 0 || ch === 0) return;
+
     const iw = img.naturalWidth || 1920;
     const ih = img.naturalHeight || 1080;
 
@@ -66,6 +67,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
 
     if (img && img.complete) {
       paintImage(ctx, canvas, img);
+      setIsCanvasReady(true);
     }
   }, []);
 
@@ -73,23 +75,28 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
   useEffect(() => {
     let isCancelled = false;
 
-    // Priority 1: Load Frame 1 immediately for instant first-paint
-    const firstImg = new Image();
+    // Load Frame 1 immediately
+    const firstImg = new window.Image();
     firstImg.src = getFramePath(1);
-    firstImg.onload = () => {
+
+    const onFirstLoad = () => {
       if (isCancelled) return;
       imagesRef.current.set(1, firstImg);
-      setIsLoaded(true);
       drawFrame(1);
       preloadRemainingFrames();
     };
 
+    if (firstImg.complete) {
+      onFirstLoad();
+    } else {
+      firstImg.onload = onFirstLoad;
+    }
+
     const preloadRemainingFrames = () => {
-      // Prioritize intermediate keyframes across 269 frames for ultra-responsive scrubbing
       const queue: number[] = [];
-      // Pass 1: Every 2nd frame
+      // Pass 1: Every 2nd frame for rapid responsiveness
       for (let i = 2; i <= TOTAL_FRAMES; i += 2) queue.push(i);
-      // Pass 2: Remaining odd frames
+      // Pass 2: Remaining frames
       for (let i = 3; i <= TOTAL_FRAMES; i += 2) queue.push(i);
 
       let pointer = 0;
@@ -98,7 +105,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
       const loadNext = () => {
         if (isCancelled || pointer >= queue.length) return;
         const idx = queue[pointer++];
-        const img = new Image();
+        const img = new window.Image();
         img.src = getFramePath(idx);
         img.onload = () => {
           if (isCancelled) return;
@@ -126,8 +133,8 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+      canvas.width = (rect.width || window.innerWidth) * dpr;
+      canvas.height = (rect.height || window.innerHeight) * dpr;
       drawFrame(currentFrameRef.current);
     };
 
@@ -149,11 +156,6 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
       setActiveStage(1);
     } else {
       setActiveStage(2);
-    }
-
-    if (clamped >= TOTAL_FRAMES) {
-      isCompletedRef.current = true;
-      setIsAnimationComplete(true);
     }
 
     if (!isRenderingRef.current) {
@@ -181,30 +183,21 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
     const handleWheel = (e: WheelEvent) => {
       const scrollY = window.scrollY;
 
-      // Only control when user is at the top of the webpage (hero section)
       if (scrollY <= 10) {
         if (e.deltaY > 0) {
-          // User is scrolling down
+          // Scrolling down: scrub frames until frame 269
           if (currentFrameRef.current < TOTAL_FRAMES) {
-            // Animation is in progress: Lock viewport and advance frames
             e.preventDefault();
-            // Dynamically scale step: ~4 to 8 frames per notch for responsive velocity
             const step = Math.max(3, Math.min(10, Math.round(Math.abs(e.deltaY) * 0.07)));
             stepFrameTo(currentFrameRef.current + step);
-          } else {
-            // Animation has reached the very end (frame 269):
-            // Allow normal page scroll downwards into the rest of the site!
           }
+          // Once at frame 269, allow normal page scroll down into the showroom!
         } else if (e.deltaY < 0) {
-          // User is scrolling up at top: rewind frames
+          // Scrolling up: rewind frames
           if (currentFrameRef.current > 1) {
             e.preventDefault();
             const step = Math.max(3, Math.min(10, Math.round(Math.abs(e.deltaY) * 0.07)));
             stepFrameTo(currentFrameRef.current - step);
-            if (currentFrameRef.current < TOTAL_FRAMES) {
-              isCompletedRef.current = false;
-              setIsAnimationComplete(false);
-            }
           }
         }
       }
@@ -236,7 +229,6 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
       }
     };
 
-    // Attach non-passive wheel listener
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("touchstart", handleTouchStart, { passive: true });
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
@@ -256,7 +248,17 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
       ref={containerRef}
       className="relative w-full h-screen min-h-screen overflow-hidden bg-[#030508]"
     >
-      {/* Full-Bleed Highway Canvas Background */}
+      {/* Fallback Initial Image: Guarantees 0ms blank screen on first paint */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/frames/ezgif-frame-001.jpg"
+        alt="Kritika E-Rickshaw Highway"
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 pointer-events-none ${
+          isCanvasReady ? "opacity-0" : "opacity-100"
+        }`}
+      />
+
+      {/* Dynamic 269-Frame Highway Canvas Background */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full object-cover pointer-events-none"
@@ -277,79 +279,44 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Column: Headings & Descriptions with Enter/Exit Animations */}
             <div className="lg:col-span-8">
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" initial={false}>
                 {activeStage === 0 && (
-                  /* Stage 0: Initial Load — All 3 Headings Animate Into Viewport */
+                  /* Stage 0: Initial Load — All 3 Headings 100% visible immediately */
                   <motion.div
                     key="stage-0"
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                     className="space-y-4"
                   >
-                    <motion.div
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.05 }}
-                      className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-cyan-400"
-                    >
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-cyan-400">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       <span>OFFICIAL E-RICKSHAW SHOWROOM • DHEMAJI, ASSAM</span>
-                    </motion.div>
-
-                    {/* All 3 Headings on initial load with staggered animation */}
-                    <div className="space-y-1">
-                      <motion.h1
-                        initial={{ opacity: 0, y: 25 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-white leading-none"
-                      >
-                        YOUR JOURNEY.
-                      </motion.h1>
-                      <motion.div
-                        initial={{ opacity: 0, y: 25 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300 leading-none"
-                      >
-                        YOUR FREEDOM.
-                      </motion.div>
-                      <motion.div
-                        initial={{ opacity: 0, y: 25 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                        className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-300 leading-none"
-                      >
-                        YOUR E-RICKSHAW.
-                      </motion.div>
                     </div>
 
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: 0.4 }}
-                      className="text-xs sm:text-sm font-mono text-slate-400 tracking-wide"
-                    >
+                    {/* All 3 Headings on initial load */}
+                    <div className="space-y-1">
+                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-white leading-none">
+                        YOUR JOURNEY.
+                      </h1>
+                      <div className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300 leading-none">
+                        YOUR FREEDOM.
+                      </div>
+                      <div className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-300 leading-none">
+                        YOUR E-RICKSHAW.
+                      </div>
+                    </div>
+
+                    <p className="text-xs sm:text-sm font-mono text-slate-400 tracking-wide">
                       BUILT FOR BIGGER DREAMS & CLEAN ELECTRIC MOBILITY
-                    </motion.p>
+                    </p>
 
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: 0.45 }}
-                      className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal"
-                    >
+                    <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal">
                       Discover reliable commercial E-Rickshaws, exciting customization accessories, and convenient financing assistance through our associated finance partners — all under one showroom roof in Dhemaji.
-                    </motion.p>
+                    </p>
 
-                    <motion.div
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                      className="flex flex-wrap items-center gap-3 pt-2"
-                    >
+                    <div className="flex flex-wrap items-center gap-3 pt-2">
                       <a
                         href="#vehicles"
                         className="inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 rounded-full font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 transition shadow-lg shadow-emerald-500/20 group cursor-pointer"
@@ -367,7 +334,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                         <Sparkles className="w-4 h-4 text-cyan-400" />
                         <span>Book a Test Ride</span>
                       </button>
-                    </motion.div>
+                    </div>
                   </motion.div>
                 )}
 
@@ -375,10 +342,10 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                   /* Stage 1: As user scrolls, replaced by Fleet Power & Range Features */
                   <motion.div
                     key="stage-1"
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 25 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                     className="space-y-4"
                   >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-emerald-400">
@@ -429,10 +396,10 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                   /* Stage 2: Final Stage — Showroom Handover & Custom Accessories */
                   <motion.div
                     key="stage-2"
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 25 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                     className="space-y-4"
                   >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-violet-400">
