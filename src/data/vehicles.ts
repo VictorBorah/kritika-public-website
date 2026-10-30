@@ -104,3 +104,4 @@ export const VEHICLE_MODELS: VehicleModel[] = [
     ],
   },
 ];
+

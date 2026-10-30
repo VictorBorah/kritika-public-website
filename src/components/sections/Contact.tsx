@@ -7,11 +7,10 @@ import {
   Mail,
   MessageSquare,
   Send,
-  Sparkles,
   CheckCircle2,
-  Clock,
   ExternalLink,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
 
 export default function Contact() {
@@ -60,61 +59,77 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 sm:py-32 relative bg-[#030508] overflow-hidden">
-      {/* Background Lighting */}
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
-
+    <section id="contact" className="py-20 sm:py-28 relative bg-[#030508] border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono">
-            <MapPin className="w-4 h-4" />
+        {/* Header with Motion */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-3xl mx-auto mb-14 space-y-3"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-xs font-mono">
+            <MapPin className="w-3.5 h-3.5" />
             <span>Showroom Direct Connect</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-heading text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight">
             Visit Our Showroom or <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-violet-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300">
               Get in Touch Today
             </span>
           </h2>
 
-          <p className="text-slate-300 text-base sm:text-lg">
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
             Experience the vehicles in person, test drive models, consult on accessories, or discuss partner financing with our team.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
           {/* Left Column: Direct Showroom Info Cards */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5 space-y-4">
             {/* Showroom Address */}
-            <div className="p-6 rounded-2xl bg-[#070D1B]/80 border border-white/10 hover:border-cyan-400/40 transition">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="dark-automotive-card p-5 sm:p-6"
+            >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0 text-cyan-400">
-                  <MapPin className="w-6 h-6" />
+                <div className="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 text-cyan-400">
+                  <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">
+                  <span className="text-[11px] font-mono text-cyan-400 uppercase tracking-widest block mb-1">
                     Showroom Address
                   </span>
                   <h4 className="text-base font-bold text-white font-heading">
                     Rittika Enterprise
                   </h4>
-                  <p className="text-sm text-slate-300 mt-1 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed font-normal">
                     Pegu Bazaar, Dhemaji Town, <br />
                     Dhemaji – 787057, Assam, India.
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Telephone & WhatsApp */}
-            <div className="p-6 rounded-2xl bg-[#070D1B]/80 border border-white/10 hover:border-emerald-400/40 transition">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="dark-automotive-card p-5 sm:p-6"
+            >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0 text-emerald-400">
-                  <Phone className="w-6 h-6" />
+                <div className="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 text-emerald-400">
+                  <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest block mb-1">
+                  <span className="text-[11px] font-mono text-emerald-400 uppercase tracking-widest block mb-1">
                     Direct Showroom Phone
                   </span>
                   <a
@@ -124,7 +139,7 @@ export default function Contact() {
                     +91-99543-67393
                   </a>
                   <p className="text-xs text-slate-400 mt-1">
-                    Available during showroom hours: Monday – Saturday (9:30 AM – 7:00 PM)
+                    Showroom hours: Monday – Saturday (9:30 AM – 7:00 PM)
                   </p>
 
                   <div className="pt-3">
@@ -141,21 +156,27 @@ export default function Contact() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Email Contact */}
-            <div className="p-6 rounded-2xl bg-[#070D1B]/80 border border-white/10 hover:border-violet-400/40 transition">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="dark-automotive-card p-5 sm:p-6"
+            >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center shrink-0 text-violet-400">
-                  <Mail className="w-6 h-6" />
+                <div className="w-11 h-11 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center shrink-0 text-violet-400">
+                  <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-xs font-mono text-violet-400 uppercase tracking-widest block mb-1">
+                  <span className="text-[11px] font-mono text-violet-400 uppercase tracking-widest block mb-1">
                     Email Desk
                   </span>
                   <a
                     href="mailto:sales@kritikafoundation.com"
-                    className="text-base font-bold font-mono text-white hover:text-violet-400 transition-colors block break-all"
+                    className="text-sm sm:text-base font-bold font-mono text-white hover:text-violet-400 transition-colors block break-all"
                   >
                     sales@kritikafoundation.com
                   </a>
@@ -164,10 +185,10 @@ export default function Contact() {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Embedded Location Map Frame */}
-            <div className="rounded-2xl overflow-hidden border border-white/10 bg-[#070D1B] h-48 relative">
+            <div className="rounded-2xl overflow-hidden border border-white/10 bg-[#070D1B] h-44 relative">
               <iframe
                 title="Kritika Micro Foundation Showroom Location"
                 src="https://maps.google.com/maps?q=Dhemaji+Assam+787057&t=&z=13&ie=UTF8&iwloc=&output=embed"
@@ -177,24 +198,30 @@ export default function Contact() {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
-              <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-[#030508]/90 border border-white/10 text-[10px] font-mono text-slate-300">
+              <div className="absolute bottom-2 left-2 px-2.5 py-0.5 rounded bg-[#030508]/90 border border-white/10 text-[10px] font-mono text-slate-300">
                 Pegu Bazaar, Dhemaji – 787057
               </div>
             </div>
           </div>
 
-          {/* Right Column: Interactive Contact Form with WhatsApp fallback */}
-          <div className="lg:col-span-7">
-            <div className="cyber-card-glow p-6 sm:p-10 rounded-3xl h-full flex flex-col justify-between">
+          {/* Right Column: Contact Form — Clean Dark Obsidian */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="lg:col-span-7"
+          >
+            <div className="dark-automotive-card p-6 sm:p-9 h-full flex flex-col justify-between">
               <div>
                 <div className="mb-6">
-                  <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">
-                    Direct Inquiry Form
+                  <span className="text-[11px] font-mono text-cyan-400 uppercase tracking-widest block mb-1">
+                    Direct Inquiry Desk
                   </span>
                   <h3 className="text-2xl font-bold font-heading text-white">
                     Send an Enquiry to Our Showroom
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 mt-1">
+                  <p className="text-xs sm:text-sm text-slate-300 mt-1 font-normal">
                     Fill out your contact details below. Our team directly reviews submissions and responds via phone or WhatsApp.
                   </p>
                 </div>
@@ -217,7 +244,7 @@ export default function Contact() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="e.g. Pradip Gogoi"
-                        className="w-full px-4 py-3 rounded-xl bg-[#091022] border border-white/10 text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition"
+                        className="w-full px-4 py-3 rounded-xl bg-[#0B1222] border border-white/10 text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition"
                       />
                     </div>
 
@@ -233,7 +260,7 @@ export default function Contact() {
                           value={phone}
                           onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                           placeholder="10-digit mobile"
-                          className="w-full px-4 py-3 rounded-xl bg-[#091022] border border-white/10 text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition font-mono"
+                          className="w-full px-4 py-3 rounded-xl bg-[#0B1222] border border-white/10 text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition font-mono"
                         />
                       </div>
 
@@ -244,7 +271,7 @@ export default function Contact() {
                         <select
                           value={interest}
                           onChange={(e) => setInterest(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl bg-[#091022] border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition"
+                          className="w-full px-4 py-3 rounded-xl bg-[#0B1222] border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition"
                         >
                           <option value="E-Rickshaw Purchase">E-Rickshaw Purchase</option>
                           <option value="Optional Accessories">Vehicle Accessories</option>
@@ -264,13 +291,13 @@ export default function Contact() {
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         placeholder="Tell us what you're looking for, preferred model or delivery requirements..."
-                        className="w-full px-4 py-3 rounded-xl bg-[#091022] border border-white/10 text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition resize-none"
+                        className="w-full px-4 py-3 rounded-xl bg-[#0B1222] border border-white/10 text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition resize-none"
                       />
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full py-4 px-6 rounded-xl font-semibold text-sm text-[#030508] bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-300 hover:brightness-110 transition shadow-xl shadow-cyan-500/20 flex items-center justify-center gap-2 group cursor-pointer"
+                      className="w-full py-4 px-6 rounded-full font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 transition shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 group cursor-pointer"
                     >
                       <span>Send Direct Enquiry via WhatsApp</span>
                       <Send className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -301,7 +328,7 @@ export default function Contact() {
                 )}
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

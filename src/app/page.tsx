@@ -2,8 +2,7 @@
 
 import React, { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
-import Hero from "@/components/sections/Hero";
-import ScrollAnimation from "@/components/sections/ScrollAnimation";
+import CinematicHero from "@/components/sections/CinematicHero";
 import WhyChooseUs from "@/components/sections/WhyChooseUs";
 import VehicleShowcase from "@/components/sections/VehicleShowcase";
 import Accessories from "@/components/sections/Accessories";
@@ -43,34 +42,31 @@ export default function Home() {
       {/* Top Floating Navbar */}
       <Navbar onOpenEnquiry={handleOpenEnquiry} />
 
-      {/* Main Flow */}
+      {/* Main Flow: Unified Cinematic Hero (Scroll sequence + animating entrance headings) */}
       <main>
-        {/* Section A & B: Hero */}
-        <Hero onOpenEnquiry={handleOpenEnquiry} />
+        {/* Unified Cinematic Hero */}
+        <CinematicHero onOpenEnquiry={handleOpenEnquiry} />
 
-        {/* Section C: 269-Frame Scroll Canvas Sequence */}
-        <ScrollAnimation onOpenEnquiry={handleOpenEnquiry} />
-
-        {/* Section D: Why Choose Us Feature Cards */}
+        {/* Showroom Advantage & Assurance (Flows immediately with zero gap) */}
         <WhyChooseUs onOpenEnquiry={handleOpenEnquiry} />
 
-        {/* Section E: E-Rickshaw Vehicles Showcase */}
+        {/* E-Rickshaw Vehicles Showcase */}
         <VehicleShowcase onOpenEnquiry={handleVehicleSelect} />
 
-        {/* Section F: Optional Accessories Showcase */}
+        {/* Optional Accessories Hub */}
         <Accessories onOpenEnquiry={handleOpenEnquiry} />
 
-        {/* Section G: Financing Assistance Information */}
+        {/* Financing Assistance Information */}
         <Financing onOpenEnquiry={handleOpenEnquiry} />
 
-        {/* Section H: About Dealership */}
+        {/* About Dealership */}
         <About />
 
-        {/* Section I: Contact Section & Map */}
+        {/* Contact Section & Map */}
         <Contact />
       </main>
 
-      {/* Section J: Dark Gaming Footer */}
+      {/* Footer */}
       <Footer />
 
       {/* Quick Interactive Modal */}

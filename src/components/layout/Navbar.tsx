@@ -30,7 +30,6 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
 
   const navLinks = [
     { label: "Home", href: "#hero" },
-    { label: "Story in Motion", href: "#cinematic-sequence" },
     { label: "Why Us", href: "#why-choose-us" },
     { label: "E-Rickshaws", href: "#vehicles" },
     { label: "Accessories", href: "#accessories" },
@@ -100,13 +99,10 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
 
               <button
                 onClick={() => onOpenEnquiry("General Showroom Enquiry")}
-                className="relative inline-flex items-center justify-center p-[1px] overflow-hidden rounded-xl group focus:outline-none"
+                className="px-4 py-2 rounded-full text-xs font-semibold font-mono tracking-wide text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 border border-emerald-400/30 transition-all flex items-center gap-1.5 shadow-md shadow-emerald-500/20"
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-cyan-400 to-violet-500 rounded-xl transition-all duration-300 group-hover:opacity-100 opacity-80" />
-                <span className="relative px-4 py-2 text-xs font-semibold font-mono tracking-wide text-white bg-[#070B14] rounded-[11px] flex items-center gap-1.5 transition-colors group-hover:bg-[#070B14]/80">
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Enquire Now</span>
-                </span>
+                <Sparkles className="w-3.5 h-3.5 text-white" />
+                <span>Enquire Now</span>
               </button>
             </div>
 
@@ -195,3 +191,4 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
     </>
   );
 }
+
