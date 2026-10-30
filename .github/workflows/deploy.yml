@@ -1,0 +1,91 @@
+name: CI/CD Pipeline - Deploy Kritika Showroom Website
+
+on:
+  push:
+    branches:
+      - master
+      - staging
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-kmf-website-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Next.js Static Export
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Static Site
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_NAME: "Kritika Micro Foundation"
+          NEXT_PUBLIC_SITE_TAGLINE: "E-Rickshaw Showroom & Dealership"
+          NEXT_PUBLIC_SHOWROOM_ADDRESS: "Rittika Enterprise, Pegu Bazaar, Dhemaji Town, Dhemaji – 787057, Assam, India"
+          NEXT_PUBLIC_CONTACT_EMAIL: "sales@kritikafoundation.com"
+          NEXT_PUBLIC_CONTACT_PHONE: "+919954367393"
+          NEXT_PUBLIC_CONTACT_PHONE_DISPLAY: "+91-99543-67393"
+          NEXT_PUBLIC_WHATSAPP_NUMBER: "919954367393"
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-export
+          path: out/
+          retention-days: 1
+
+  deploy-staging:
+    name: Deploy to Staging (kmflabz.space)
+    needs: build
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: static-export
+          path: ./out/
+
+      - name: Deploy via FTP to Staging cPanel
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_STAGING_SERVER }}
+          username: ${{ secrets.FTP_STAGING_USERNAME }}
+          password: ${{ secrets.FTP_STAGING_PASSWORD }}
+          local-dir: ./out/
+          server-dir: ./
+          dangerous-clean-slate: false
+
+  deploy-production:
+    name: Deploy to Production (kritikafoundation.com)
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: static-export
+          path: ./out/
+
+      - name: Deploy via FTP to Production cPanel
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_PROD_SERVER }}
+          username: ${{ secrets.FTP_PROD_USERNAME }}
+          password: ${{ secrets.FTP_PROD_PASSWORD }}
+          local-dir: ./out/
+          server-dir: ./
+          dangerous-clean-slate: false
