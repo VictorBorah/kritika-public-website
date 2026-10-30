@@ -38,7 +38,7 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#030508] text-white selection:bg-[#00FF9D] selection:text-[#030508] overflow-hidden">
+    <div className="relative min-h-screen bg-[#030508] text-white selection:bg-[#00FF9D] selection:text-[#030508]">
       {/* Top Floating Navbar */}
       <Navbar onOpenEnquiry={handleOpenEnquiry} />
 

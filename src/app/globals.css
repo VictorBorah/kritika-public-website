@@ -15,13 +15,14 @@
 html {
   scroll-behavior: smooth;
   color-scheme: dark;
+  overflow-x: clip;
 }
 
 body {
   background-color: var(--bg-dark);
   color: #F8FAFC;
   font-family: var(--font-inter);
-  overflow-x: hidden;
+  overflow-x: clip;
   selection-background-color: #00FF9D;
   selection-color: #030508;
 }
