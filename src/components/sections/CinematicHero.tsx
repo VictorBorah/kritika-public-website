@@ -261,6 +261,56 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
   // Line 1 ("YOUR JOURNEY."): Displays when frame >= 20 (in Stage 0)
   const showH1 = hasStartedEntrance && activeStage === 0 && frame >= 20;
 
+  // Animated Signature Slogan ("Your Life Your Style") visibility logic:
+  // - Hidden on page load / Frame 1
+  // - Animates into view on Frame #8 or greater
+  // - Stays visible & transitions colors keeping pace with frame scroll
+  // - Hides smoothly when section scrolls past (frame > 258)
+  // - Repeats when user scrolls back to the top and down again
+  const showSlogan = hasStartedEntrance && frame >= 8 && frame <= 258;
+
+  // Dynamic multi-stage color transitions for the slogan
+  const getSloganColor = (f: number) => {
+    if (f < 50) {
+      // Stage 1: Warm Golden Sunrise & Amber (Frames 8 - 49)
+      return {
+        gradient: "from-amber-100 via-amber-300 to-orange-400",
+        shadow: "rgba(245, 158, 11, 0.75)",
+        shadowGlow: "rgba(251, 191, 36, 0.4)",
+      };
+    } else if (f < 105) {
+      // Stage 2: Neon Cyan & Electric Ice (Frames 50 - 104)
+      return {
+        gradient: "from-white via-cyan-200 to-teal-300",
+        shadow: "rgba(0, 240, 255, 0.8)",
+        shadowGlow: "rgba(6, 182, 212, 0.45)",
+      };
+    } else if (f < 160) {
+      // Stage 3: Pure EV Emerald Glow & Mint Wave (Frames 105 - 159)
+      return {
+        gradient: "from-emerald-200 via-teal-200 to-cyan-300",
+        shadow: "rgba(0, 255, 157, 0.8)",
+        shadowGlow: "rgba(16, 185, 129, 0.45)",
+      };
+    } else if (f < 215) {
+      // Stage 4: Signature Max Crimson & Vivid Coral (Frames 160 - 214)
+      return {
+        gradient: "from-pink-100 via-rose-300 to-orange-400",
+        shadow: "rgba(244, 63, 94, 0.8)",
+        shadowGlow: "rgba(255, 51, 102, 0.45)",
+      };
+    } else {
+      // Stage 5: Twilight Cosmic Violet & Neon Lavender (Frames 215 - 258)
+      return {
+        gradient: "from-violet-100 via-fuchsia-300 to-cyan-300",
+        shadow: "rgba(168, 85, 247, 0.8)",
+        shadowGlow: "rgba(139, 92, 246, 0.45)",
+      };
+    }
+  };
+
+  const sloganColor = getSloganColor(frame);
+
   return (
     <>
       {/* 
@@ -355,6 +405,30 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
         <div className="absolute inset-y-0 right-0 w-44 sm:w-80 bg-gradient-to-l from-[#030508]/95 via-[#030508]/45 to-transparent pointer-events-none z-10" />
         <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#030508]/85 via-[#030508]/40 to-transparent pointer-events-none z-10" />
         <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#030508]/95 via-[#030508]/60 to-transparent pointer-events-none z-10" />
+
+        {/* Dynamic Animated Signature Slogan: "Your Life Your Style" (Rotated 30° CCW, Top-Right) */}
+        <AnimatePresence>
+          {showSlogan && (
+            <motion.div
+              key="hero-slogan"
+              initial={{ opacity: 0, scale: 0.8, y: -24, rotate: -30 }}
+              animate={{ opacity: 1, scale: 1, y: 0, rotate: -30 }}
+              exit={{ opacity: 0, scale: 0.8, y: -24, rotate: -30 }}
+              transition={{ duration: 0.55, ease: [0.42, 0, 0.58, 1] }}
+              className="absolute top-20 sm:top-24 md:top-28 right-4 sm:right-10 md:right-16 lg:right-24 xl:right-32 z-30 pointer-events-none select-none origin-center text-right"
+            >
+              <div
+                className={`font-signature font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[0.88] tracking-wide transition-all duration-700 ease-out text-transparent bg-clip-text bg-gradient-to-r ${sloganColor.gradient}`}
+                style={{
+                  filter: `drop-shadow(0 4px 14px ${sloganColor.shadow}) drop-shadow(0 0 32px ${sloganColor.shadowGlow})`,
+                }}
+              >
+                <div className="whitespace-nowrap">Your Life</div>
+                <div className="whitespace-nowrap">Your Style</div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Viewport Content Container */}
         <div className="relative z-20 h-full w-full flex flex-col justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-4">

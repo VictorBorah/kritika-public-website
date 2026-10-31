@@ -42,6 +42,7 @@ const config: Config = {
         heading: ["var(--font-outfit)", "sans-serif"],
         body: ["var(--font-inter)", "sans-serif"],
         mono: ["var(--font-space-grotesk)", "monospace"],
+        signature: ["var(--font-signature)", "'Caveat'", "'Satisfy'", "'Dancing Script'", "cursive"],
       },
       animation: {
         'spin-slow': 'spin 8s linear infinite',
