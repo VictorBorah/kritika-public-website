@@ -340,14 +340,11 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
           className="absolute inset-0 w-full h-full pointer-events-none"
         />
 
-        {/* Vignette & Border Shadows: Seamlessly hides the left/right frame borders into pure obsidian background */}
-        <div className="absolute inset-y-0 left-0 w-32 sm:w-80 bg-gradient-to-r from-[#030508] via-[#030508]/85 to-transparent pointer-events-none z-10" />
-        <div className="absolute inset-y-0 right-0 w-32 sm:w-80 bg-gradient-to-l from-[#030508] via-[#030508]/85 to-transparent pointer-events-none z-10" />
-        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#030508] via-[#030508]/80 to-transparent pointer-events-none z-10" />
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#030508] via-[#030508]/90 to-transparent pointer-events-none z-10" />
-
-        {/* Radial Soft Vignette for theatrical automotive depth across entire hero section */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(3,5,8,0.65)_85%,#030508_100%)] pointer-events-none z-10" />
+        {/* Reduced, Soft Translucent Border Shadows (Much lighter & narrower for open, bright visuals) */}
+        <div className="absolute inset-y-0 left-0 w-16 sm:w-36 bg-gradient-to-r from-[#030508]/40 via-[#030508]/15 to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-y-0 right-0 w-16 sm:w-36 bg-gradient-to-l from-[#030508]/40 via-[#030508]/15 to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#030508]/60 to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#030508]/75 to-transparent pointer-events-none z-10" />
 
         {/* Viewport Content Container */}
         <div className="relative z-20 h-full w-full flex flex-col justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-4">
