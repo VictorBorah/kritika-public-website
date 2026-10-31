@@ -203,7 +203,7 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
                   onClick={() => onOpenEnquiry(selectedModel.name)}
                   className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 transition shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 group cursor-pointer"
                 >
-                  <span>Enquire on This Vehicle</span>
+                  <span>Enquire</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
 
@@ -212,7 +212,7 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
                   className="w-full sm:w-auto px-5 py-3.5 rounded-xl font-medium text-xs sm:text-sm text-cyan-300 hover:text-white bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-400/30 transition text-center flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Maximize2 className="w-4 h-4 text-cyan-400" />
-                  <span>View 2000×2000 HD</span>
+                  <span>View HD</span>
                 </button>
 
                 <a
@@ -278,7 +278,7 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-2.5">
                     <span className="text-[11px] font-mono font-medium text-white px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md border border-white/20 flex items-center gap-1.5 shadow-lg text-cyan-300">
                       <Maximize2 className="w-3 h-3 text-cyan-400" />
-                      <span>View 2000×2000 HD</span>
+                      <span>View HD</span>
                     </span>
                   </div>
                 </div>

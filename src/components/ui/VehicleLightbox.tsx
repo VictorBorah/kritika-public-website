@@ -281,7 +281,7 @@ export default function VehicleLightbox({
                 className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-semibold text-xs sm:text-sm font-sans flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>Enquire on {activeModel.name}</span>
+                <span>Enquire</span>
               </button>
             </div>
           </div>
@@ -290,3 +290,4 @@ export default function VehicleLightbox({
     </AnimatePresence>
   );
 }
+
