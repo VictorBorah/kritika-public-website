@@ -110,7 +110,7 @@ export default function EnquiryModal({
           <div>
             <div className="mb-6">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium tracking-wide bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 mb-2">
-                <Sparkles className="w-3.5 h-3.5" /> Dhemaji Showroom Direct Desk
+                <Sparkles className="w-3.5 h-3.5" /> Showroom Direct Desk
               </span>
               <h3 className="text-2xl font-bold font-heading text-white">
                 Book a Test Ride & Vehicle Enquiry
@@ -191,7 +191,7 @@ export default function EnquiryModal({
                     rows={2}
                     value={customNotes}
                     onChange={(e) => setCustomNotes(e.target.value)}
-                    placeholder="e.g. Looking for delivery in Dhemaji / Lakhimpur..."
+                    placeholder="e.g. Looking for delivery / test ride options..."
                     className="w-full pl-10 pr-4 py-2 rounded-xl bg-[#0B1325] border border-white/10 text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition resize-none"
                   />
                 </div>
@@ -206,7 +206,7 @@ export default function EnquiryModal({
               </button>
 
               <p className="text-[11px] text-center text-slate-500 mt-2">
-                ⚡ Direct instant connect with Rittika Enterprise showroom desk at Pegu Bazaar, Dhemaji.
+                ⚡ Direct instant connect with Rittika Enterprise showroom desk at Pegu Bazaar.
               </p>
             </form>
           </div>

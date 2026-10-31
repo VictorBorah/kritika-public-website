@@ -109,8 +109,8 @@ export default function Contact() {
                     Rittika Enterprise
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed font-normal">
-                    Pegu Bazaar, Dhemaji Town, <br />
-                    Dhemaji – 787057, Assam, India.
+                    Pegu Bazaar, <br />
+                    Assam – 787057, India.
                   </p>
                 </div>
               </div>
@@ -191,7 +191,7 @@ export default function Contact() {
             <div className="rounded-2xl overflow-hidden border border-white/10 bg-[#070D1B] h-44 relative">
               <iframe
                 title="Kritika Micro Foundation Showroom Location"
-                src="https://maps.google.com/maps?q=Dhemaji+Assam+787057&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                src="https://maps.google.com/maps?q=Pegu+Bazaar+Assam+787057&t=&z=13&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0, filter: "invert(90%) hue-rotate(180deg) contrast(90%)" }}
@@ -199,7 +199,7 @@ export default function Contact() {
                 referrerPolicy="no-referrer-when-downgrade"
               />
               <div className="absolute bottom-2 left-2 px-2.5 py-0.5 rounded bg-[#030508]/90 border border-white/10 text-[10px] font-mono text-slate-300">
-                Pegu Bazaar, Dhemaji – 787057
+                Pegu Bazaar, Assam – 787057
               </div>
             </div>
           </div>
@@ -304,7 +304,7 @@ export default function Contact() {
                     </button>
 
                     <p className="text-[11px] text-center text-slate-500 mt-2">
-                      *Direct WhatsApp routing ensures zero delays in getting your quote from our Dhemaji showroom desk.
+                      *Direct WhatsApp routing ensures zero delays in getting your quote from our showroom desk.
                     </p>
                   </form>
                 ) : (

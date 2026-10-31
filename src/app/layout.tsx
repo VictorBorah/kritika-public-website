@@ -10,16 +10,16 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://kritikafoundation.com"),
-  title: "Kritika Micro Foundation | E-Rickshaw Showroom in Dhemaji, Assam",
+  title: "Kritika Micro Foundation | Commercial E-Rickshaw Showroom, Assam",
   description:
-    "Explore E-Rickshaws, premium accessories, and convenient vehicle financing assistance at Kritika Micro Foundation, Dhemaji, Assam.",
+    "Explore E-Rickshaws, premium accessories, and convenient vehicle financing assistance at Kritika Micro Foundation showroom in Assam.",
   keywords: [
-    "E-Rickshaw showroom Dhemaji",
+    "E-Rickshaw showroom Assam",
     "Kritika Micro Foundation",
     "electric rickshaw Assam",
     "E-Rickshaw accessories",
     "commercial electric vehicle Assam",
-    "Rittika Enterprise Dhemaji",
+    "Rittika Enterprise",
     "E-Rickshaw dealership",
     "vehicle finance assistance",
   ],
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Kritika Micro Foundation | E-Rickshaw Showroom & Dealership",
     description:
-      "Explore E-Rickshaws, premium accessories, and convenient vehicle financing assistance at Kritika Micro Foundation, Dhemaji, Assam.",
+      "Explore E-Rickshaws, premium accessories, and convenient vehicle financing assistance at Kritika Micro Foundation showroom in Assam.",
     url: "https://kritikafoundation.com",
     siteName: "Kritika Micro Foundation",
     images: [

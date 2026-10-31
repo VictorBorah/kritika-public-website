@@ -37,7 +37,7 @@ export const SHOWROOM_FEATURES: ShowroomFeature[] = [
     id: "same-day-delivery",
     title: "Same-Day Delivery*",
     subtitle: "Direct From Showroom Floor",
-    description: "Drive your new E-Rickshaw home immediately upon completion of partner formalities and stock clearance directly from our Dhemaji showroom.",
+    description: "Drive your new E-Rickshaw home immediately upon completion of partner formalities and stock clearance directly from our showroom floor.",
     icon: "Truck",
     badge: "Quick Turnaround",
     hasAsterisk: true,

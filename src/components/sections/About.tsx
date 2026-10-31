@@ -8,8 +8,8 @@ export default function About() {
   const showroomValues = [
     {
       icon: <Building className="w-5 h-5 text-cyan-400" />,
-      title: "Local Dhemaji Presence",
-      desc: "Centrally located at Pegu Bazaar, Dhemaji Town, providing accessible sales and after-sales customer support for Assam.",
+      title: "Direct Showroom Presence",
+      desc: "Centrally located at Pegu Bazaar, providing accessible sales and after-sales customer support for Assam.",
     },
     {
       icon: <ShieldCheck className="w-5 h-5 text-emerald-400" />,
@@ -52,12 +52,12 @@ export default function About() {
             </p>
 
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
-              Operating out of Rittika Enterprise at Pegu Bazaar, Dhemaji, our dedicated showroom provides local drivers, entrepreneurs, and fleet owners with a dependable, transparent environment to inspect road-ready electric vehicles, configure add-on packages, and coordinate partner financing.
+              Operating out of Rittika Enterprise at Pegu Bazaar, our dedicated showroom provides local drivers, entrepreneurs, and fleet owners with a dependable, transparent environment to inspect road-ready electric vehicles, configure add-on packages, and coordinate partner financing.
             </p>
 
             <div className="pt-2 flex items-center gap-2.5 text-xs font-mono text-emerald-400">
               <MapPin className="w-4 h-4 shrink-0" />
-              <span>Pegu Bazaar, Dhemaji Town, Assam – 787057</span>
+              <span>Pegu Bazaar, Assam – 787057</span>
             </div>
           </motion.div>
 

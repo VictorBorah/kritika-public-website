@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import Image from "next/image";
 import { ArrowRight, Sparkles, BatteryCharging, Shield, Truck, HandCoins, ChevronDown, CheckCircle2, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -22,6 +21,15 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
   const [frame, setFrame] = useState<number>(1);
   const [activeStage, setActiveStage] = useState<number>(0);
   const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
+  const [hasStartedEntrance, setHasStartedEntrance] = useState<boolean>(false);
+
+  // Initial entrance trigger: Start with headings hidden, then animate Heading 3 into view
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHasStartedEntrance(true);
+    }, 150);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Format frame path: /frames/ezgif-frame-001.jpg
   const getFramePath = (index: number) => {
@@ -71,7 +79,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
     }
   }, []);
 
-  // Frame preloader
+  // Frame preloader with safe hoisting
   useEffect(() => {
     let isCancelled = false;
 
@@ -191,7 +199,6 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
             const step = Math.max(3, Math.min(10, Math.round(Math.abs(e.deltaY) * 0.07)));
             stepFrameTo(currentFrameRef.current + step);
           }
-          // Once at frame 269, allow normal page scroll down into the showroom!
         } else if (e.deltaY < 0) {
           // Scrolling up: rewind frames
           if (currentFrameRef.current > 1) {
@@ -214,13 +221,11 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
         const diff = touchStartYRef.current - currentY;
 
         if (diff > 0 && currentFrameRef.current < TOTAL_FRAMES) {
-          // Swiping up (scrolling down): advance frames
           e.preventDefault();
           const step = Math.max(2, Math.round(diff * 0.18));
           stepFrameTo(currentFrameRef.current + step);
           touchStartYRef.current = currentY;
         } else if (diff < 0 && currentFrameRef.current > 1) {
-          // Swiping down (scrolling up): rewind frames
           e.preventDefault();
           const step = Math.max(2, Math.round(Math.abs(diff) * 0.18));
           stepFrameTo(currentFrameRef.current - step);
@@ -242,70 +247,171 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
 
   const progressPercent = Math.round((frame / TOTAL_FRAMES) * 100);
 
+  // Headings visibility logic (Stage 0):
+  // Line 3 ("YOUR E-RICKSHAW."): Animates into view on load / Frame 1, stays visible in Stage 0
+  const showH3 = hasStartedEntrance && activeStage === 0;
+
+  // Line 2 ("YOUR FREEDOM."): Displays when frame >= 8 (in Stage 0)
+  const showH2 = hasStartedEntrance && activeStage === 0 && frame >= 8;
+
+  // Line 1 ("YOUR JOURNEY."): Displays when frame >= 20 (in Stage 0)
+  const showH1 = hasStartedEntrance && activeStage === 0 && frame >= 20;
+
   return (
-    <section
-      id="hero"
-      ref={containerRef}
-      className="relative w-full h-screen min-h-screen overflow-hidden bg-[#030508]"
-    >
-      {/* Fallback Initial Image: Guarantees 0ms blank screen on first paint */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/frames/ezgif-frame-001.jpg"
-        alt="Kritika E-Rickshaw Highway"
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 pointer-events-none ${
-          isCanvasReady ? "opacity-0" : "opacity-100"
-        }`}
-      />
+    <>
+      {/* 
+        FIXED VERTICAL FRAME INDICATOR HUD:
+        - Stays 100% fixed at one position during scroll of the entire page
+        - Ultra-slim & compact (w-9 sm:w-10, h-64 fixed height)
+        - Constant height: does NOT grow, shrink, or deflect
+      */}
+      <div
+        className="fixed right-3 sm:right-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center justify-between w-9 sm:w-10 h-64 py-3.5 rounded-full bg-[#030508]/85 backdrop-blur-md border border-white/10 shadow-2xl shadow-black/80 select-none pointer-events-auto"
+        role="region"
+        aria-label="Scroll sequence progress HUD"
+      >
+        {/* Top: Fixed Stage Counter */}
+        <div className="flex flex-col items-center leading-none">
+          <span className="text-xs font-mono font-bold text-white tracking-wider">
+            0{activeStage + 1}
+          </span>
+          <span className="text-[8px] font-mono text-slate-500 mt-0.5">/03</span>
+        </div>
 
-      {/* Dynamic 269-Frame Highway Canvas Background */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-      />
+        {/* Center: Slim Vertical Progress Track (Fixed height: h-24) */}
+        <div className="w-[3px] h-24 bg-white/10 rounded-full relative overflow-hidden my-auto">
+          <div
+            className="absolute top-0 left-0 w-full bg-gradient-to-b from-cyan-400 via-teal-300 to-emerald-400 transition-all duration-100 rounded-full"
+            style={{ height: `${progressPercent}%` }}
+          />
+        </div>
 
-      {/* Ambient Dark Gradient Overlays for High Automotive Contrast */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#030508]/95 via-[#030508]/50 to-transparent pointer-events-none z-10" />
-      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#030508] to-transparent pointer-events-none z-10" />
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#030508] via-[#030508]/80 to-transparent pointer-events-none z-10" />
+        {/* Bottom: Progress %, Frame Number & Dedicated Reset Button Slot */}
+        <div className="flex flex-col items-center leading-none gap-1">
+          <span className="text-[9px] font-mono font-bold text-cyan-300 tabular-nums">
+            {progressPercent}%
+          </span>
+          <span className="text-[8px] font-mono text-slate-500 tabular-nums tracking-tighter">
+            F-{frame}
+          </span>
 
-      {/* Viewport Content Container */}
-      <div className="relative z-20 h-full w-full flex flex-col justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-4">
-        {/* Top Space */}
-        <div />
+          {/* Reset button inside dedicated fixed slot - ensures 0px container expansion */}
+          <div className="h-5 w-5 flex items-center justify-center mt-0.5">
+            <button
+              onClick={() => stepFrameTo(1)}
+              className={`p-1 rounded-full text-slate-400 hover:text-white transition-opacity duration-200 cursor-pointer ${
+                frame > 1 ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
+              title="Reset Animation to Frame 1"
+              aria-label="Reset to frame 1"
+            >
+              <RotateCcw className="w-3 h-3" />
+            </button>
+          </div>
+        </div>
+      </div>
 
-        {/* Central Automotive Hero Content */}
-        <div className="my-auto py-2">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Column: Headings & Descriptions with Enter/Exit Animations */}
-            <div className="lg:col-span-8">
+      {/* Main Hero Section */}
+      <section
+        id="hero"
+        ref={containerRef}
+        className="relative w-full h-screen min-h-screen overflow-hidden bg-[#030508]"
+      >
+        {/* Fallback Initial Image: Guarantees 0ms blank screen on first paint */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/frames/ezgif-frame-001.jpg"
+          alt="Kritika E-Rickshaw Highway"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 pointer-events-none ${
+            isCanvasReady ? "opacity-0" : "opacity-100"
+          }`}
+        />
+
+        {/* Dynamic 269-Frame Highway Canvas Background */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        />
+
+        {/* Ambient Dark Gradient Overlays for High Automotive Contrast */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#030508]/95 via-[#030508]/50 to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#030508] to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#030508] via-[#030508]/80 to-transparent pointer-events-none z-10" />
+
+        {/* Viewport Content Container */}
+        <div className="relative z-20 h-full w-full flex flex-col justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-4">
+          {/* Top Space */}
+          <div />
+
+          {/* Central Automotive Hero Content */}
+          <div className="my-auto py-2">
+            <div className="max-w-3xl">
               <AnimatePresence mode="wait" initial={false}>
                 {activeStage === 0 && (
-                  /* Stage 0: Initial Load — All 3 Headings 100% visible immediately */
+                  /* Stage 0: Staggered Bottom-to-Top Headings Animation with Ease-in-Out */
                   <motion.div
                     key="stage-0"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
-                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.45, ease: [0.42, 0, 0.58, 1] }}
                     className="space-y-4"
                   >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-cyan-400">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <span>OFFICIAL E-RICKSHAW SHOWROOM • DHEMAJI, ASSAM</span>
+                      <span>OFFICIAL E-RICKSHAW SHOWROOM • ASSAM</span>
                     </div>
 
-                    {/* All 3 Headings on initial load */}
+                    {/* 
+                      STAGGERED HEADINGS:
+                      Bottom-to-Top entrance order:
+                      - Frame 1 / Initial Load: "YOUR E-RICKSHAW." animates in first
+                      - Frame 8+: "YOUR FREEDOM." displays and enters
+                      - Frame 20+: "YOUR JOURNEY." displays and enters
+                      - Scrolling in reverse back to top: hides in reverse, leaving "YOUR E-RICKSHAW."
+                    */}
                     <div className="space-y-1">
-                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-white leading-none">
+                      {/* Line 1 (Top Heading): YOUR JOURNEY. */}
+                      <motion.h1
+                        initial={false}
+                        animate={{
+                          opacity: showH1 ? 1 : 0,
+                          y: showH1 ? 0 : 18,
+                          filter: showH1 ? "blur(0px)" : "blur(4px)",
+                        }}
+                        transition={{ duration: 0.5, ease: [0.42, 0, 0.58, 1] }}
+                        className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-white leading-none"
+                      >
                         YOUR JOURNEY.
-                      </h1>
-                      <div className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300 leading-none">
+                      </motion.h1>
+
+                      {/* Line 2 (Middle Heading): YOUR FREEDOM. */}
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          opacity: showH2 ? 1 : 0,
+                          y: showH2 ? 0 : 18,
+                          filter: showH2 ? "blur(0px)" : "blur(4px)",
+                        }}
+                        transition={{ duration: 0.5, ease: [0.42, 0, 0.58, 1] }}
+                        className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300 leading-none"
+                      >
                         YOUR FREEDOM.
-                      </div>
-                      <div className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-300 leading-none">
+                      </motion.div>
+
+                      {/* Line 3 (Bottom Heading): YOUR E-RICKSHAW. */}
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          opacity: showH3 ? 1 : 0,
+                          y: showH3 ? 0 : 18,
+                          filter: showH3 ? "blur(0px)" : "blur(4px)",
+                        }}
+                        transition={{ duration: 0.5, ease: [0.42, 0, 0.58, 1] }}
+                        className="text-4xl sm:text-6xl md:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-300 leading-none"
+                      >
                         YOUR E-RICKSHAW.
-                      </div>
+                      </motion.div>
                     </div>
 
                     <p className="text-xs sm:text-sm font-mono text-slate-400 tracking-wide">
@@ -313,7 +419,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                     </p>
 
                     <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal">
-                      Discover reliable commercial E-Rickshaws, exciting customization accessories, and convenient financing assistance through our associated finance partners — all under one showroom roof in Dhemaji.
+                      Discover reliable commercial E-Rickshaws, exciting customization accessories, and convenient financing assistance through our associated finance partners — all under one showroom roof.
                     </p>
 
                     <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -339,13 +445,13 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                 )}
 
                 {activeStage === 1 && (
-                  /* Stage 1: As user scrolls, replaced by Fleet Power & Range Features */
+                  /* Stage 1: Power & Chassis Telemetry */
                   <motion.div
                     key="stage-1"
                     initial={{ opacity: 0, y: 25 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
-                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.45, ease: [0.42, 0, 0.58, 1] }}
                     className="space-y-4"
                   >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-emerald-400">
@@ -393,13 +499,13 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                 )}
 
                 {activeStage === 2 && (
-                  /* Stage 2: Final Stage — Showroom Handover & Custom Accessories */
+                  /* Stage 2: Turnkey Road-Ready Handover */
                   <motion.div
                     key="stage-2"
                     initial={{ opacity: 0, y: 25 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
-                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.45, ease: [0.42, 0, 0.58, 1] }}
                     className="space-y-4"
                   >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-violet-400">
@@ -435,130 +541,95 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                         href="#contact"
                         className="px-6 py-3.5 rounded-full font-medium text-xs sm:text-sm text-slate-200 bg-white/10 hover:bg-white/15 border border-white/10 backdrop-blur-md transition flex items-center gap-2"
                       >
-                        <span>Visit Dhemaji Showroom</span>
+                        <span>Visit Showroom</span>
                       </a>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
+          </div>
 
-            {/* Right Column: Discrete Vertical Stage Counter & Progress HUD */}
-            <div className="hidden lg:flex lg:col-span-4 flex-col items-end gap-4">
-              <div className="flex flex-col items-center gap-2 font-mono text-xs text-slate-400 bg-black/50 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-2xl">
-                <span className="text-2xl font-bold text-white">
-                  0{activeStage + 1}
-                </span>
-                <span className="text-[10px] text-slate-500">/ 03</span>
-
-                <div className="w-[3px] h-20 bg-white/10 rounded-full relative overflow-hidden my-2">
-                  <div
-                    className="absolute top-0 left-0 w-full bg-cyan-400 transition-all duration-150"
-                    style={{ height: `${progressPercent}%` }}
-                  />
+          {/* Bottom Capability Telemetry Strip & Scroll Cue */}
+          <div className="border border-white/10 bg-[#030508]/90 backdrop-blur-md py-3.5 px-4 rounded-2xl shadow-xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 items-center">
+              <div className="flex items-center gap-2.5 border-r border-white/5 pr-2">
+                <BatteryCharging className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div className="truncate">
+                  <span className="block text-xs font-bold text-white font-mono uppercase tracking-wider">
+                    120+ KM RANGE
+                  </span>
+                  <span className="text-[10px] text-slate-400 truncate block">
+                    High-Efficiency BLDC
+                  </span>
                 </div>
+              </div>
 
-                <span className="text-[10px] font-mono text-cyan-400 font-bold">
-                  {progressPercent}%
-                </span>
+              <div className="flex items-center gap-2.5 border-r border-white/5 pr-2">
+                <Truck className="w-4 h-4 text-cyan-400 shrink-0" />
+                <div className="truncate">
+                  <span className="block text-xs font-bold text-white font-mono uppercase tracking-wider">
+                    SAME-DAY DELIVERY*
+                  </span>
+                  <span className="text-[10px] text-slate-400 truncate block">
+                    Direct from Showroom
+                  </span>
+                </div>
+              </div>
 
-                <span className="text-[9px] tracking-widest uppercase -rotate-90 origin-center my-4 text-slate-500">
-                  FRAME {frame}
-                </span>
+              <div className="flex items-center gap-2.5 border-r border-white/5 pr-2">
+                <HandCoins className="w-4 h-4 text-violet-400 shrink-0" />
+                <div className="truncate">
+                  <span className="block text-xs font-bold text-white font-mono uppercase tracking-wider">
+                    PARTNER FINANCING
+                  </span>
+                  <span className="text-[10px] text-slate-400 truncate block">
+                    Minimal Documentation
+                  </span>
+                </div>
+              </div>
 
-                {frame > 1 && (
+              <div className="flex items-center gap-2.5 border-r border-white/5 pr-2">
+                <Shield className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div className="truncate">
+                  <span className="block text-xs font-bold text-white font-mono uppercase tracking-wider">
+                    100% ASSEMBLED
+                  </span>
+                  <span className="text-[10px] text-slate-400 truncate block">
+                    Factory Inspected & Tested
+                  </span>
+                </div>
+              </div>
+
+              <div className="col-span-2 md:col-span-4 lg:col-span-1 flex items-center justify-center lg:justify-end gap-2 text-xs font-mono">
+                {frame < TOTAL_FRAMES ? (
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 text-cyan-400 font-bold text-[11px]">
+                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                      <span>SCROLL TO ANIMATE</span>
+                      <ChevronDown className="w-3.5 h-3.5 animate-bounce" />
+                    </div>
+                    <button
+                      onClick={scrollToNextSection}
+                      className="text-[10px] text-slate-500 hover:text-slate-300 underline underline-offset-2 ml-1 cursor-pointer"
+                    >
+                      Skip
+                    </button>
+                  </div>
+                ) : (
                   <button
-                    onClick={() => stepFrameTo(1)}
-                    className="mt-2 p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer"
-                    title="Reset Animation to Frame 1"
+                    onClick={scrollToNextSection}
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 hover:bg-emerald-500/30 transition text-[11px] font-bold animate-pulse cursor-pointer"
                   >
-                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>EXPLORE SHOWROOM</span>
+                    <ChevronDown className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
             </div>
           </div>
         </div>
-
-        {/* Bottom Capability Telemetry Strip & Scroll Cue */}
-        <div className="border border-white/10 bg-[#030508]/90 backdrop-blur-md py-3.5 px-4 rounded-2xl shadow-xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 items-center">
-            <div className="flex items-center gap-2.5 border-r border-white/5 pr-2">
-              <BatteryCharging className="w-4 h-4 text-emerald-400 shrink-0" />
-              <div className="truncate">
-                <span className="block text-xs font-bold text-white font-mono uppercase tracking-wider">
-                  120+ KM RANGE
-                </span>
-                <span className="text-[10px] text-slate-400 truncate block">
-                  High-Efficiency BLDC
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 border-r border-white/5 pr-2">
-              <Truck className="w-4 h-4 text-cyan-400 shrink-0" />
-              <div className="truncate">
-                <span className="block text-xs font-bold text-white font-mono uppercase tracking-wider">
-                  SAME-DAY DELIVERY*
-                </span>
-                <span className="text-[10px] text-slate-400 truncate block">
-                  Direct from Showroom
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 border-r border-white/5 pr-2">
-              <HandCoins className="w-4 h-4 text-violet-400 shrink-0" />
-              <div className="truncate">
-                <span className="block text-xs font-bold text-white font-mono uppercase tracking-wider">
-                  PARTNER FINANCING
-                </span>
-                <span className="text-[10px] text-slate-400 truncate block">
-                  Minimal Documentation
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 border-r border-white/5 pr-2">
-              <Shield className="w-4 h-4 text-emerald-400 shrink-0" />
-              <div className="truncate">
-                <span className="block text-xs font-bold text-white font-mono uppercase tracking-wider">
-                  100% ASSEMBLED
-                </span>
-                <span className="text-[10px] text-slate-400 truncate block">
-                  Factory Inspected & Tested
-                </span>
-              </div>
-            </div>
-
-            <div className="col-span-2 md:col-span-4 lg:col-span-1 flex items-center justify-center lg:justify-end gap-2 text-xs font-mono">
-              {frame < TOTAL_FRAMES ? (
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1.5 text-cyan-400 font-bold text-[11px]">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                    <span>SCROLL TO ANIMATE</span>
-                    <ChevronDown className="w-3.5 h-3.5 animate-bounce" />
-                  </div>
-                  <button
-                    onClick={scrollToNextSection}
-                    className="text-[10px] text-slate-500 hover:text-slate-300 underline underline-offset-2 ml-1 cursor-pointer"
-                  >
-                    Skip
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={scrollToNextSection}
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 hover:bg-emerald-500/30 transition text-[11px] font-bold animate-pulse cursor-pointer"
-                >
-                  <span>EXPLORE SHOWROOM</span>
-                  <ChevronDown className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

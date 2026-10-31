@@ -42,7 +42,7 @@ export default function Footer() {
             <div className="flex items-center gap-2 pt-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-xs font-mono text-emerald-400">
-                Showroom Active • Dhemaji, Assam
+                Showroom Active • Assam
               </span>
             </div>
           </div>
@@ -100,8 +100,8 @@ export default function Footer() {
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                 <span>
-                  Rittika Enterprise, Pegu Bazaar, Dhemaji Town, <br />
-                  Dhemaji – 787057, Assam, India.
+                  Rittika Enterprise, Pegu Bazaar, <br />
+                  Assam – 787057, India.
                 </span>
               </div>
 

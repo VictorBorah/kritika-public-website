@@ -13,7 +13,7 @@ export default function Financing({ onOpenEnquiry }: FinancingProps) {
     {
       step: "01",
       title: "Select Your E-Rickshaw",
-      desc: "Choose your preferred model, color variant, and optional accessory package at our Dhemaji showroom.",
+      desc: "Choose your preferred model, color variant, and optional accessory package at our showroom.",
     },
     {
       step: "02",

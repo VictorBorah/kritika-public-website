@@ -60,7 +60,7 @@ export default function WhyChooseUs({ onOpenEnquiry }: WhyChooseUsProps) {
           </h2>
 
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal">
-            We bring together genuine vehicle options, hassle-free partner financing, and instant showroom handover under one seamless experience in Dhemaji.
+            We bring together genuine vehicle options, hassle-free partner financing, and instant showroom handover under one seamless experience in Assam.
           </p>
         </div>
 
