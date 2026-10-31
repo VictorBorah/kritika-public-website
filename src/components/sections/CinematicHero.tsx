@@ -435,8 +435,9 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
         <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#030508]/95 via-[#030508]/60 to-transparent pointer-events-none z-10" />
 
         {/* Dynamic Animated Signature Slogan: "Your Life Your Style"
-            - Desktop: Rotated -30° CCW, placed top-right (lg:top-[28%] lg:right-[19%])
-            - Mobile: Positioned right above the bottom capability bar in the red box area with subtle signature slope
+            - Placed in top-right corner across all viewports, dynamically filling the upper-right sky beside the lifted vehicle
+            - Mobile: top-20 xs:top-22 right-3 xs:right-4, text-2xl xs:text-3xl, -25° CCW tilt (zero cramming at bottom, eliminates top blank space)
+            - Desktop: md:top-[25%] lg:top-[28%] xl:top-[29%], md:right-[15%] lg:right-[19%] xl:right-[21%], -30° CCW
         */}
         <AnimatePresence>
           {showSlogan && (
@@ -445,23 +446,23 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
               initial={{
                 opacity: 0,
                 scale: 0.8,
-                y: isMobile ? 12 : -24,
-                rotate: isMobile ? -6 : -30,
+                y: -20,
+                rotate: isMobile ? -25 : -30,
               }}
               animate={{
                 opacity: 1,
                 scale: 1,
                 y: 0,
-                rotate: isMobile ? -6 : -30,
+                rotate: isMobile ? -25 : -30,
               }}
               exit={{
                 opacity: 0,
                 scale: 0.8,
-                y: isMobile ? 12 : -24,
-                rotate: isMobile ? -6 : -30,
+                y: -20,
+                rotate: isMobile ? -25 : -30,
               }}
               transition={{ duration: 0.55, ease: [0.42, 0, 0.58, 1] }}
-              className="absolute z-30 pointer-events-none select-none origin-center bottom-[86px] xs:bottom-[92px] sm:bottom-[98px] md:bottom-auto left-0 right-0 md:left-auto md:top-[25%] lg:top-[28%] xl:top-[29%] 2xl:top-[30%] md:right-[15%] lg:right-[19%] xl:right-[21%] 2xl:right-[22%] text-center md:text-right px-4 md:px-0"
+              className="absolute top-20 xs:top-22 sm:top-24 md:top-[25%] lg:top-[28%] xl:top-[29%] 2xl:top-[30%] right-3 xs:right-4 sm:right-8 md:right-[15%] lg:right-[19%] xl:right-[21%] 2xl:right-[22%] z-30 pointer-events-none select-none origin-center text-right"
             >
               <div
                 className={`font-signature font-bold text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[0.88] tracking-wide transition-all duration-700 ease-out text-transparent bg-clip-text bg-gradient-to-r ${sloganColor.gradient}`}
@@ -469,10 +470,8 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                   filter: `drop-shadow(0 4px 14px ${sloganColor.shadow}) drop-shadow(0 0 32px ${sloganColor.shadowGlow})`,
                 }}
               >
-                <div className="flex md:flex-col items-center justify-center md:items-end gap-2 sm:gap-3 md:gap-0">
-                  <span className="whitespace-nowrap">Your Life</span>
-                  <span className="whitespace-nowrap">Your Style</span>
-                </div>
+                <div className="whitespace-nowrap">Your Life</div>
+                <div className="whitespace-nowrap">Your Style</div>
               </div>
             </motion.div>
           )}
@@ -484,10 +483,10 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
           <div className="hidden md:block" />
 
           {/* Central Automotive Hero Content:
-              - Mobile: Pushed down towards the lower half (mt-auto mb-11 xs:mb-14 md:mb-0) so the lifted tuk-tuk animation in the upper half is completely visible and unobstructed!
-              - Desktop: Vertically centered (md:my-auto) in the left column.
+              - Mobile: Positioned cleanly in the lower road area with comfortable breathing room above bottom telemetry
+              - Desktop: Vertically centered (md:my-auto) in the left column
           */}
-          <div className="mt-auto mb-11 xs:mb-14 md:my-auto md:mb-0 py-1 md:py-2">
+          <div className="mt-auto mb-2 sm:mb-3 md:my-auto md:mb-0 py-1 md:py-2">
             <div className="max-w-3xl">
               <AnimatePresence mode="wait" initial={false}>
                 {activeStage === 0 && (
