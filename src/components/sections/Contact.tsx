@@ -74,14 +74,14 @@ export default function Contact() {
             <span>Showroom Direct Connect</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight">
             Visit Our Showroom or <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300">
               Get in Touch Today
             </span>
           </h2>
 
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-xs sm:text-base text-slate-300 leading-relaxed">
             Experience the vehicles in person, test drive models, consult on accessories, or discuss partner financing with our team.
           </p>
         </motion.div>
@@ -218,10 +218,10 @@ export default function Contact() {
                   <span className="text-[11px] font-mono text-cyan-400 uppercase tracking-widest block mb-1">
                     Direct Inquiry Desk
                   </span>
-                  <h3 className="text-2xl font-bold font-heading text-white">
+                  <h3 className="text-xl sm:text-2xl font-bold font-heading text-white">
                     Send an Enquiry to Our Showroom
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 mt-1 font-normal">
+                  <p className="text-[11px] sm:text-sm text-slate-300 mt-1 font-normal">
                     Fill out your contact details below. Our team directly reviews submissions and responds via phone or WhatsApp.
                   </p>
                 </div>

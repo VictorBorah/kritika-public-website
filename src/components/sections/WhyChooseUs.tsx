@@ -52,14 +52,14 @@ export default function WhyChooseUs({ onOpenEnquiry }: WhyChooseUsProps) {
             <span>Showroom Advantage & Assurance</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight">
             Why Buy Your E-Rickshaw From <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300">
               Kritika Micro Foundation?
             </span>
           </h2>
 
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal">
+          <p className="text-xs sm:text-base text-slate-300 leading-relaxed font-normal">
             We bring together genuine vehicle options, hassle-free partner financing, and instant showroom handover under one seamless experience in Assam.
           </p>
         </div>
@@ -89,11 +89,11 @@ export default function WhyChooseUs({ onOpenEnquiry }: WhyChooseUsProps) {
                   {feat.subtitle}
                 </span>
 
-                <h3 className="text-lg font-bold font-heading text-white group-hover:text-cyan-300 transition-colors">
+                <h3 className="text-base sm:text-lg font-bold font-heading text-white group-hover:text-cyan-300 transition-colors">
                   {feat.title}
                 </h3>
 
-                <p className="text-sm text-slate-300 mt-2.5 leading-relaxed font-normal">
+                <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed font-normal">
                   {feat.description}
                 </p>
               </div>

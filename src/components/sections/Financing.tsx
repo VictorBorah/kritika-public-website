@@ -49,14 +49,14 @@ export default function Financing({ onOpenEnquiry }: FinancingProps) {
               <span>Customer Financing Assistance</span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight">
               Your Dream E-Rickshaw, <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300">
                 Made Easier to Own.
               </span>
             </h2>
 
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto font-normal">
+            <p className="text-xs sm:text-base text-slate-300 leading-relaxed max-w-2xl mx-auto font-normal">
               Explore convenient vehicle financing options through our associated finance partners. With minimal documentation requirements and a streamlined application process, eligible customers can benefit from same-day loan sanctioning and vehicle delivery, subject to finance partner approval and vehicle availability.
             </p>
           </motion.div>

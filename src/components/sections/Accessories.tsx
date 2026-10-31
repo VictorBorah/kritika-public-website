@@ -68,14 +68,14 @@ export default function Accessories({ onOpenEnquiry }: AccessoriesProps) {
             <span>Vehicle Customization Hub</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight">
             Optional Accessories & <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-cyan-300 to-teal-300">
               Customization Packages
             </span>
           </h2>
 
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-xs sm:text-base text-slate-300 leading-relaxed">
             Upgrade functionality, night visibility, passenger comfort, and vehicle protection. Available individually or bundled with your fully assembled vehicle.
           </p>
 
@@ -135,18 +135,18 @@ export default function Accessories({ onOpenEnquiry }: AccessoriesProps) {
                   {item.tagline}
                 </span>
 
-                <h3 className="text-lg font-bold font-heading text-white group-hover:text-cyan-300 transition-colors">
+                <h3 className="text-base sm:text-lg font-bold font-heading text-white group-hover:text-cyan-300 transition-colors">
                   {item.name}
                 </h3>
 
-                <p className="text-sm text-slate-300 mt-2 leading-relaxed font-normal">
+                <p className="text-xs sm:text-sm text-slate-300 mt-1.5 sm:mt-2 leading-relaxed font-normal">
                   {item.description}
                 </p>
 
                 {/* Features List */}
                 <div className="mt-4 pt-4 border-t border-white/5 space-y-1.5">
                   {item.features.map((f, i) => (
-                    <div key={i} className="flex items-start gap-2 text-xs text-slate-300">
+                    <div key={i} className="flex items-start gap-2 text-[11px] sm:text-xs text-slate-300">
                       <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                       <span>{f}</span>
                     </div>

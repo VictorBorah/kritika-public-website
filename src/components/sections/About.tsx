@@ -40,18 +40,18 @@ export default function About() {
               <span>About Kritika Micro Foundation</span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight leading-tight">
               Driving Urban Mobility & <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300">
                 Economic Independence
               </span>
             </h2>
 
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+            <p className="text-xs sm:text-base text-slate-300 leading-relaxed font-normal">
               At <strong className="text-white">Kritika Micro Foundation</strong>, we believe mobility should be accessible, convenient, and empowering. We bring together E-Rickshaw options, essential accessories, and financing assistance through our associated partners to make your vehicle purchasing experience simpler.
             </p>
 
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-normal">
+            <p className="text-[11px] sm:text-sm text-slate-400 leading-relaxed font-normal">
               Operating out of Rittika Enterprise at Pegu Bazaar, our dedicated showroom provides local drivers, entrepreneurs, and fleet owners with a dependable, transparent environment to inspect road-ready electric vehicles, configure add-on packages, and coordinate partner financing.
             </p>
 

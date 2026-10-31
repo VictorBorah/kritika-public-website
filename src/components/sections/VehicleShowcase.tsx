@@ -49,14 +49,14 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
             <span>Showroom Fleet • 2026 Models</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading text-white tracking-tight">
             Explore Our Commercial <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300">
               E-Rickshaw Fleet
             </span>
           </h2>
 
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-xs sm:text-base text-slate-300 leading-relaxed">
             Engineered with heavy-duty robotic welded chassis, energy-dense powerpacks, and verified ARAI compliance for daily commercial earning power.
           </p>
 
@@ -141,10 +141,10 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
                 <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">
                   {selectedModel.series}
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-extrabold font-heading text-white">
+                <h3 className="text-xl sm:text-3xl font-extrabold font-heading text-white">
                   {selectedModel.name}
                 </h3>
-                <p className="text-sm text-slate-300 mt-2 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-300 mt-1.5 sm:mt-2 leading-relaxed">
                   {selectedModel.tagline}
                 </p>
               </div>
