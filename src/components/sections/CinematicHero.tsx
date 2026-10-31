@@ -45,12 +45,15 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
     const iw = img.naturalWidth || 1920;
     const ih = img.naturalHeight || 1080;
 
-    // Use natural scaling to fill viewport without over-zooming or stretching
-    const scale = Math.max(cw / iw, ch / ih);
+    // Do NOT stretch, zoom, or blow up low-res frames
+    // Fit cleanly within the viewport, capped at 1.0 natural scale to guarantee zero pixelation or blur
+    const fitScale = Math.min(cw / iw, ch / ih);
+    const scale = Math.min(fitScale, 1.0);
+
     const w = Math.round(iw * scale);
     const h = Math.round(ih * scale);
 
-    // Exact horizontal and vertical centering across viewport
+    // Exact horizontal and vertical centering
     const x = Math.round((cw - w) / 2);
     const y = Math.round((ch - h) / 2);
 
@@ -326,7 +329,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
         <img
           src="/frames/ezgif-frame-001.jpg"
           alt="Kritika E-Rickshaw Highway"
-          className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-300 pointer-events-none ${
+          className={`absolute inset-0 m-auto max-w-full max-h-full object-contain object-center transition-opacity duration-300 pointer-events-none ${
             isCanvasReady ? "opacity-0" : "opacity-100"
           }`}
         />
@@ -334,22 +337,26 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
         {/* Dynamic 269-Frame Highway Canvas Background - Horizontally Centered */}
         <canvas
           ref={canvasRef}
-          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+          className="absolute inset-0 w-full h-full pointer-events-none"
         />
 
-        {/* Ambient Dark Gradient Overlays - Soft & Balanced without blacking out the left side */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030508]/40 via-transparent to-transparent pointer-events-none z-10" />
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#030508]/80 to-transparent pointer-events-none z-10" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#030508]/85 to-transparent pointer-events-none z-10" />
+        {/* Vignette & Border Shadows: Seamlessly hides the left/right frame borders into pure obsidian background */}
+        <div className="absolute inset-y-0 left-0 w-32 sm:w-80 bg-gradient-to-r from-[#030508] via-[#030508]/85 to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-y-0 right-0 w-32 sm:w-80 bg-gradient-to-l from-[#030508] via-[#030508]/85 to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#030508] via-[#030508]/80 to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#030508] via-[#030508]/90 to-transparent pointer-events-none z-10" />
+
+        {/* Radial Soft Vignette for theatrical automotive depth across entire hero section */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(3,5,8,0.65)_85%,#030508_100%)] pointer-events-none z-10" />
 
         {/* Viewport Content Container */}
         <div className="relative z-20 h-full w-full flex flex-col justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-4">
           {/* Top Space */}
           <div />
 
-          {/* Central Automotive Hero Content with subtle glassmorphic contrast panel */}
+          {/* Central Automotive Hero Content (Container box removed, crisp text shadows applied) */}
           <div className="my-auto py-2">
-            <div className="max-w-3xl p-5 sm:p-7 rounded-3xl bg-black/30 backdrop-blur-[2px] border border-white/5 shadow-2xl">
+            <div className="max-w-3xl">
               <AnimatePresence mode="wait" initial={false}>
                 {activeStage === 0 && (
                   /* Stage 0: Staggered Bottom-to-Top Headings Animation with Ease-in-Out */
@@ -359,7 +366,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
                     transition={{ duration: 0.45, ease: [0.42, 0, 0.58, 1] }}
-                    className="space-y-4"
+                    className="space-y-4 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
                   >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-cyan-400">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -456,7 +463,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
                     transition={{ duration: 0.45, ease: [0.42, 0, 0.58, 1] }}
-                    className="space-y-4"
+                    className="space-y-4 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
                   >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-emerald-400">
                       <BatteryCharging className="w-3.5 h-3.5" />
@@ -510,7 +517,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
                     transition={{ duration: 0.45, ease: [0.42, 0, 0.58, 1] }}
-                    className="space-y-4"
+                    className="space-y-4 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
                   >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-violet-400">
                       <Truck className="w-3.5 h-3.5" />
