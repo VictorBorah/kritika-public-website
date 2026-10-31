@@ -45,11 +45,8 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
     const iw = img.naturalWidth || 1920;
     const ih = img.naturalHeight || 1080;
 
-    // Do NOT stretch, zoom, or blow up low-res frames
-    // Fit cleanly within the viewport, capped at 1.0 natural scale to guarantee zero pixelation or blur
-    const fitScale = Math.min(cw / iw, ch / ih);
-    const scale = Math.min(fitScale, 1.0);
-
+    // Stretch to cover and fill hero container without letterboxing
+    const scale = Math.max(cw / iw, ch / ih);
     const w = Math.round(iw * scale);
     const h = Math.round(ih * scale);
 
@@ -324,27 +321,37 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
         ref={containerRef}
         className="relative w-full h-screen min-h-screen overflow-hidden bg-[#030508]"
       >
-        {/* Fallback Initial Image: Centered, natural scale without blur */}
+        {/* Fallback Initial Image: Stretched to cover and fill hero container */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/frames/ezgif-frame-001.jpg"
           alt="Kritika E-Rickshaw Highway"
-          className={`absolute inset-0 m-auto max-w-full max-h-full object-contain object-center transition-opacity duration-300 pointer-events-none ${
+          className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-300 pointer-events-none ${
             isCanvasReady ? "opacity-0" : "opacity-100"
           }`}
         />
 
-        {/* Dynamic 269-Frame Highway Canvas Background - Horizontally Centered */}
+        {/* Dynamic 269-Frame Highway Canvas Background: Stretched Full-Bleed Cover */}
         <canvas
           ref={canvasRef}
-          className="absolute inset-0 w-full h-full pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
         />
 
-        {/* Reduced, Soft Translucent Border Shadows (Much lighter & narrower for open, bright visuals) */}
-        <div className="absolute inset-y-0 left-0 w-16 sm:w-36 bg-gradient-to-r from-[#030508]/40 via-[#030508]/15 to-transparent pointer-events-none z-10" />
-        <div className="absolute inset-y-0 right-0 w-16 sm:w-36 bg-gradient-to-l from-[#030508]/40 via-[#030508]/15 to-transparent pointer-events-none z-10" />
-        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#030508]/60 to-transparent pointer-events-none z-10" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#030508]/75 to-transparent pointer-events-none z-10" />
+        {/* Faint Dotted Matrix Pattern Overlay: Covers the image scroll with a dark tint + fine cyber dots for maximum heading brightness and legibility */}
+        <div
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{
+            backgroundColor: "rgba(3, 5, 8, 0.45)",
+            backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px)`,
+            backgroundSize: "16px 16px",
+          }}
+        />
+
+        {/* Cinematic Side Shadows to spice up left and right viewport sides */}
+        <div className="absolute inset-y-0 left-0 w-44 sm:w-80 bg-gradient-to-r from-[#030508]/95 via-[#030508]/45 to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-y-0 right-0 w-44 sm:w-80 bg-gradient-to-l from-[#030508]/95 via-[#030508]/45 to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#030508]/85 via-[#030508]/40 to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#030508]/95 via-[#030508]/60 to-transparent pointer-events-none z-10" />
 
         {/* Viewport Content Container */}
         <div className="relative z-20 h-full w-full flex flex-col justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-4">
