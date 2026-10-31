@@ -415,7 +415,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
               animate={{ opacity: 1, scale: 1, y: 0, rotate: -30 }}
               exit={{ opacity: 0, scale: 0.8, y: -24, rotate: -30 }}
               transition={{ duration: 0.55, ease: [0.42, 0, 0.58, 1] }}
-              className="absolute top-20 sm:top-24 md:top-28 right-4 sm:right-10 md:right-16 lg:right-24 xl:right-32 z-30 pointer-events-none select-none origin-center text-right"
+              className="absolute top-20 sm:top-24 md:top-[25%] lg:top-[28%] xl:top-[29%] 2xl:top-[30%] right-4 sm:right-8 md:right-[15%] lg:right-[19%] xl:right-[21%] 2xl:right-[22%] z-30 pointer-events-none select-none origin-center text-right"
             >
               <div
                 className={`font-signature font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[0.88] tracking-wide transition-all duration-700 ease-out text-transparent bg-clip-text bg-gradient-to-r ${sloganColor.gradient}`}
