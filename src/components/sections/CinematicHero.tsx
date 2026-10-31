@@ -337,13 +337,16 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
           className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
         />
 
-        {/* Fine Micro-Dot Screen Overlay: Denser (8px grid), smaller (0.75px), and fainter for silky cinematic texture */}
+        {/* Subtle Graph Paper Squared Grid Overlay: Faintly visible technical blueprint squares */}
         <div
           className="absolute inset-0 pointer-events-none z-10"
           style={{
-            backgroundColor: "rgba(3, 5, 8, 0.45)",
-            backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.085) 0.75px, transparent 0.75px)`,
-            backgroundSize: "8px 8px",
+            backgroundColor: "rgba(3, 5, 8, 0.42)",
+            backgroundImage: `
+              linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px)
+            `,
+            backgroundSize: "24px 24px",
           }}
         />
 
