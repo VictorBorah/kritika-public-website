@@ -337,13 +337,13 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
           className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
         />
 
-        {/* Faint Dotted Matrix Pattern Overlay: Covers the image scroll with a dark tint + fine cyber dots for maximum heading brightness and legibility */}
+        {/* Fine Micro-Dot Screen Overlay: Denser (8px grid), smaller (0.75px), and fainter for silky cinematic texture */}
         <div
           className="absolute inset-0 pointer-events-none z-10"
           style={{
             backgroundColor: "rgba(3, 5, 8, 0.45)",
-            backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px)`,
-            backgroundSize: "16px 16px",
+            backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.085) 0.75px, transparent 0.75px)`,
+            backgroundSize: "8px 8px",
           }}
         />
 
