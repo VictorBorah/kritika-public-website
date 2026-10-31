@@ -51,6 +51,9 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://kmflabz.space
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
@@ -61,18 +64,22 @@ jobs:
       - name: Deploy via FTP to Staging cPanel
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_STAGING_SERVER }}
-          username: ${{ secrets.FTP_STAGING_USERNAME }}
-          password: ${{ secrets.FTP_STAGING_PASSWORD }}
+          server: ${{ secrets.FTP_STAGING_SERVER || secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_STAGING_USERNAME || secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_STAGING_PASSWORD || secrets.FTP_PASSWORD }}
           local-dir: ./out/
           server-dir: ./
           dangerous-clean-slate: false
+          security: 'loose'
 
   deploy-production:
     name: Deploy to Production (kritikafoundation.com)
     needs: build
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://kritikafoundation.com
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
@@ -83,10 +90,11 @@ jobs:
       - name: Deploy via FTP to Production cPanel
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_PROD_SERVER }}
-          username: ${{ secrets.FTP_PROD_USERNAME }}
-          password: ${{ secrets.FTP_PROD_PASSWORD }}
+          server: ${{ secrets.FTP_PROD_SERVER || secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_PROD_USERNAME || secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PROD_PASSWORD || secrets.FTP_PASSWORD }}
           local-dir: ./out/
           server-dir: ./
           dangerous-clean-slate: false
+          security: 'loose'
 
