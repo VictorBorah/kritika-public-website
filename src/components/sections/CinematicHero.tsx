@@ -45,15 +45,20 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
     const iw = img.naturalWidth || 1920;
     const ih = img.naturalHeight || 1080;
 
-    // Full-bleed automotive cover fill without distortion
+    // Use natural scaling to fill viewport without over-zooming or stretching
     const scale = Math.max(cw / iw, ch / ih);
-    const w = iw * scale;
-    const h = ih * scale;
-    const x = (cw - w) / 2;
-    const y = (ch - h) / 2;
+    const w = Math.round(iw * scale);
+    const h = Math.round(ih * scale);
 
+    // Exact horizontal and vertical centering across viewport
+    const x = Math.round((cw - w) / 2);
+    const y = Math.round((ch - h) / 2);
+
+    ctx.clearRect(0, 0, cw, ch);
     ctx.fillStyle = "#030508";
     ctx.fillRect(0, 0, cw, ch);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
     ctx.drawImage(img, x, y, w, h);
   };
 
@@ -134,15 +139,14 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
     };
   }, [drawFrame]);
 
-  // Canvas resize with retina DPI
+  // Canvas resize with natural viewport dimensions (prevents over-zooming/stretching)
   useEffect(() => {
     const handleResize = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = (rect.width || window.innerWidth) * dpr;
-      canvas.height = (rect.height || window.innerHeight) * dpr;
+      canvas.width = Math.round(rect.width || window.innerWidth);
+      canvas.height = Math.round(rect.height || window.innerHeight);
       drawFrame(currentFrameRef.current);
     };
 
@@ -317,35 +321,35 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
         ref={containerRef}
         className="relative w-full h-screen min-h-screen overflow-hidden bg-[#030508]"
       >
-        {/* Fallback Initial Image: Guarantees 0ms blank screen on first paint */}
+        {/* Fallback Initial Image: Centered, natural scale without blur */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/frames/ezgif-frame-001.jpg"
           alt="Kritika E-Rickshaw Highway"
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 pointer-events-none ${
+          className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-300 pointer-events-none ${
             isCanvasReady ? "opacity-0" : "opacity-100"
           }`}
         />
 
-        {/* Dynamic 269-Frame Highway Canvas Background */}
+        {/* Dynamic 269-Frame Highway Canvas Background - Horizontally Centered */}
         <canvas
           ref={canvasRef}
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
         />
 
-        {/* Ambient Dark Gradient Overlays for High Automotive Contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030508]/95 via-[#030508]/50 to-transparent pointer-events-none z-10" />
-        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#030508] to-transparent pointer-events-none z-10" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#030508] via-[#030508]/80 to-transparent pointer-events-none z-10" />
+        {/* Ambient Dark Gradient Overlays - Soft & Balanced without blacking out the left side */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#030508]/40 via-transparent to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#030508]/80 to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#030508]/85 to-transparent pointer-events-none z-10" />
 
         {/* Viewport Content Container */}
         <div className="relative z-20 h-full w-full flex flex-col justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-4">
           {/* Top Space */}
           <div />
 
-          {/* Central Automotive Hero Content */}
+          {/* Central Automotive Hero Content with subtle glassmorphic contrast panel */}
           <div className="my-auto py-2">
-            <div className="max-w-3xl">
+            <div className="max-w-3xl p-5 sm:p-7 rounded-3xl bg-black/30 backdrop-blur-[2px] border border-white/5 shadow-2xl">
               <AnimatePresence mode="wait" initial={false}>
                 {activeStage === 0 && (
                   /* Stage 0: Staggered Bottom-to-Top Headings Animation with Ease-in-Out */
