@@ -63,9 +63,9 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
     let y: number;
 
     if (isMobileViewport) {
-      // Mobile viewport: Lift the vehicle animation to the top, removing the empty sky blank space
-      // and bringing the tuk-tuks prominently into the upper viewport right below the navbar.
-      scale = Math.max(cw / iw, (ch / ih) * 1.55);
+      // Mobile viewport: Well-proportioned vehicle framing, lifted to eliminate empty sky
+      // while keeping the vehicle height compact and balanced.
+      scale = Math.max(cw / iw, (ch / ih) * 1.25);
       const w = Math.round(iw * scale);
       const h = Math.round(ih * scale);
       x = Math.round((cw - w) / 2);
@@ -393,11 +393,11 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
         </div>
       </div>
 
-      {/* Main Hero Section */}
+      {/* Main Hero Section: Compact on mobile viewports (88svh), full-screen on desktop */}
       <section
         id="hero"
         ref={containerRef}
-        className="relative w-full h-screen min-h-screen overflow-hidden bg-[#030508]"
+        className="relative w-full h-[88svh] sm:h-[92svh] md:h-screen min-h-[560px] md:min-h-screen overflow-hidden bg-[#030508]"
       >
         {/* Fallback Initial Image: Bottom-aligned on mobile to lift tuk-tuks, centered on desktop */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -483,10 +483,10 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
           <div className="hidden md:block" />
 
           {/* Central Automotive Hero Content:
-              - Mobile: Lifted up directly below vehicle with reduced top margin/padding (mt-[28vh] xs:mt-[30vh]), centered text & elements
+              - Mobile: Lifted up directly below vehicle with reduced top offset (mt-[22vh] xs:mt-[24vh]), centered text & elements
               - Desktop: Vertically centered (md:my-auto) and left-aligned in the left column
           */}
-          <div className="mt-[28vh] xs:mt-[30vh] sm:mt-[34vh] md:mt-0 md:my-auto mb-auto md:mb-0 py-1 md:py-2">
+          <div className="mt-[22vh] xs:mt-[24vh] sm:mt-[28vh] md:mt-0 md:my-auto mb-auto md:mb-0 py-1 md:py-2">
             <div className="max-w-3xl mx-auto md:mx-0">
               <AnimatePresence mode="wait" initial={false}>
                 {activeStage === 0 && (
