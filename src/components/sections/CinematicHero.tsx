@@ -478,16 +478,16 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
         </AnimatePresence>
 
         {/* Viewport Content Container */}
-        <div className="relative z-20 h-full w-full flex flex-col justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 md:pt-24 pb-3 sm:pb-4">
+        <div className="relative z-20 h-full w-full flex flex-col justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 md:pt-24 pb-3 sm:pb-4">
           {/* Top Space (Desktop only - leaves upper viewport completely open for lifted tuk-tuk animation on mobile) */}
           <div className="hidden md:block" />
 
           {/* Central Automotive Hero Content:
-              - Mobile: Positioned cleanly in the lower road area with comfortable breathing room above bottom telemetry
-              - Desktop: Vertically centered (md:my-auto) in the left column
+              - Mobile: Lifted up directly below vehicle with reduced top margin/padding (mt-[28vh] xs:mt-[30vh]), centered text & elements
+              - Desktop: Vertically centered (md:my-auto) and left-aligned in the left column
           */}
-          <div className="mt-auto mb-2 sm:mb-3 md:my-auto md:mb-0 py-1 md:py-2">
-            <div className="max-w-3xl">
+          <div className="mt-[28vh] xs:mt-[30vh] sm:mt-[34vh] md:mt-0 md:my-auto mb-auto md:mb-0 py-1 md:py-2">
+            <div className="max-w-3xl mx-auto md:mx-0">
               <AnimatePresence mode="wait" initial={false}>
                 {activeStage === 0 && (
                   /* Stage 0: Staggered Bottom-to-Top Headings Animation with Ease-in-Out */
@@ -497,9 +497,9 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
                     transition={{ duration: 0.45, ease: [0.42, 0, 0.58, 1] }}
-                    className="space-y-1.5 sm:space-y-4 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
+                    className="space-y-1.5 sm:space-y-4 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] flex flex-col items-center md:items-start text-center md:text-left"
                   >
-                    <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/5 border border-white/10 text-[10px] sm:text-xs font-mono text-cyan-400">
+                    <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/5 border border-white/10 text-[10px] sm:text-xs font-mono text-cyan-400 mx-auto md:mx-0">
                       <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse" />
                       <span>RITTIKA ENTERPRISES • DHEMAJI</span>
                     </div>
@@ -512,7 +512,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                       - Frame 20+: "YOUR JOURNEY." displays and enters
                       - Scrolling in reverse back to top: hides in reverse, leaving "YOUR E-RICKSHAW."
                     */}
-                    <div className="space-y-0.5 sm:space-y-1">
+                    <div className="space-y-0.5 sm:space-y-1 text-center md:text-left">
                       {/* Line 1 (Top Heading): YOUR JOURNEY. */}
                       <motion.h1
                         initial={false}
@@ -522,7 +522,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                           filter: showH1 ? "blur(0px)" : "blur(4px)",
                         }}
                         transition={{ duration: 0.5, ease: [0.42, 0, 0.58, 1] }}
-                        className="text-xl xs:text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-heading tracking-tight text-white leading-tight sm:leading-none"
+                        className="text-xl xs:text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-heading tracking-tight text-white leading-tight sm:leading-none text-center md:text-left"
                       >
                         YOUR JOURNEY.
                       </motion.h1>
@@ -536,7 +536,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                           filter: showH2 ? "blur(0px)" : "blur(4px)",
                         }}
                         transition={{ duration: 0.5, ease: [0.42, 0, 0.58, 1] }}
-                        className="text-xl xs:text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300 leading-tight sm:leading-none"
+                        className="text-xl xs:text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300 leading-tight sm:leading-none text-center md:text-left"
                       >
                         YOUR FREEDOM.
                       </motion.div>
@@ -550,21 +550,21 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                           filter: showH3 ? "blur(0px)" : "blur(4px)",
                         }}
                         transition={{ duration: 0.5, ease: [0.42, 0, 0.58, 1] }}
-                        className="text-xl xs:text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-300 leading-tight sm:leading-none"
+                        className="text-xl xs:text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-heading tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-300 leading-tight sm:leading-none text-center md:text-left"
                       >
                         YOUR E-RICKSHAW.
                       </motion.div>
                     </div>
 
-                    <p className="text-[10px] sm:text-sm font-mono text-slate-400 tracking-wide">
+                    <p className="text-[10px] sm:text-sm font-mono text-slate-400 tracking-wide text-center md:text-left">
                       BUILT FOR BIGGER DREAMS & CLEAN ELECTRIC MOBILITY
                     </p>
 
-                    <p className="text-[11px] xs:text-xs sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal line-clamp-2 xs:line-clamp-none">
+                    <p className="text-[11px] xs:text-xs sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal line-clamp-2 xs:line-clamp-none text-center md:text-left mx-auto md:mx-0">
                       Discover reliable commercial E-Rickshaws, exciting customization accessories, and convenient financing assistance through our associated finance partners — all under one showroom roof.
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-0.5 sm:pt-2">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 pt-0.5 sm:pt-2 w-full md:w-auto">
                       <a
                         href="#vehicles"
                         className="inline-flex items-center gap-2 sm:gap-3 px-3.5 sm:px-8 py-2 sm:py-3.5 rounded-full font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 transition shadow-lg shadow-emerald-500/20 group cursor-pointer"
@@ -594,29 +594,29 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
                     transition={{ duration: 0.45, ease: [0.42, 0, 0.58, 1] }}
-                    className="space-y-1.5 sm:space-y-4 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
+                    className="space-y-1.5 sm:space-y-4 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] flex flex-col items-center md:items-start text-center md:text-left"
                   >
-                    <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/5 border border-white/10 text-[10px] sm:text-xs font-mono text-emerald-400">
+                    <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/5 border border-white/10 text-[10px] sm:text-xs font-mono text-emerald-400 mx-auto md:mx-0">
                       <BatteryCharging className="w-3.5 h-3.5" />
                       <span>02 • POWER & CHASSIS TELEMETRY</span>
                     </div>
 
-                    <h2 className="text-xl xs:text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-heading tracking-tight text-white leading-tight sm:leading-none">
+                    <h2 className="text-xl xs:text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-heading tracking-tight text-white leading-tight sm:leading-none text-center md:text-left">
                       ENGINEERED FOR <br />
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-teal-300">
                         ASSAM ROADS.
                       </span>
                     </h2>
 
-                    <p className="text-[10px] sm:text-sm font-mono text-cyan-300 tracking-wide">
+                    <p className="text-[10px] sm:text-sm font-mono text-cyan-300 tracking-wide text-center md:text-left">
                       120+ KM PER CHARGE • HEAVY DUTY TUBULAR CHASSIS
                     </p>
 
-                    <p className="text-[11px] xs:text-xs sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal line-clamp-2 xs:line-clamp-none">
+                    <p className="text-[11px] xs:text-xs sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal line-clamp-2 xs:line-clamp-none text-center md:text-left mx-auto md:mx-0">
                       High-efficiency BLDC motor with robotic welded tubular steel frame and leaf-spring shock absorbers built specifically for rugged daily commutes with zero return bounce.
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-0.5 text-[10px] sm:text-xs font-mono text-slate-300">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 pt-0.5 text-[10px] sm:text-xs font-mono text-slate-300 w-full md:w-auto">
                       <span className="px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-lg bg-white/5 border border-white/10 flex items-center gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> 120+ km Range
                       </span>
@@ -628,13 +628,13 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                       </span>
                     </div>
 
-                    <div className="pt-0.5 sm:pt-2">
+                    <div className="pt-0.5 sm:pt-2 flex justify-center md:justify-start w-full md:w-auto">
                       <a
                         href="#vehicles"
                         className="inline-flex items-center gap-2 px-3.5 sm:px-6 py-2 sm:py-3.5 rounded-full font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 transition shadow-lg shadow-emerald-500/20 cursor-pointer"
                       >
                         <span>Check Vehicle Specifications</span>
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </a>
                     </div>
                   </motion.div>
@@ -648,29 +648,29 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -25 }}
                     transition={{ duration: 0.45, ease: [0.42, 0, 0.58, 1] }}
-                    className="space-y-1.5 sm:space-y-4 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]"
+                    className="space-y-1.5 sm:space-y-4 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] flex flex-col items-center md:items-start text-center md:text-left"
                   >
-                    <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/5 border border-white/10 text-[10px] sm:text-xs font-mono text-violet-400">
+                    <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/5 border border-white/10 text-[10px] sm:text-xs font-mono text-violet-400 mx-auto md:mx-0">
                       <Truck className="w-3.5 h-3.5" />
                       <span>03 • TURNKEY ROAD-READY HANDOVER</span>
                     </div>
 
-                    <h2 className="text-xl xs:text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-heading tracking-tight text-white leading-tight sm:leading-none">
+                    <h2 className="text-xl xs:text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-heading tracking-tight text-white leading-tight sm:leading-none text-center md:text-left">
                       READY TO DRIVE <br />
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-300">
                         HOME TODAY.
                       </span>
                     </h2>
 
-                    <p className="text-[10px] sm:text-sm font-mono text-emerald-400 tracking-wide">
+                    <p className="text-[10px] sm:text-sm font-mono text-emerald-400 tracking-wide text-center md:text-left">
                       SAME-DAY DELIVERY* • FACTORY ACCESSORIES & SOUND
                     </p>
 
-                    <p className="text-[11px] xs:text-xs sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal line-clamp-2 xs:line-clamp-none">
+                    <p className="text-[11px] xs:text-xs sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal line-clamp-2 xs:line-clamp-none text-center md:text-left mx-auto md:mx-0">
                       Inspect our Max Moter Elite, Apsara Comfort, and Apsara Loader models on the showroom floor at Pegu Bazaar. Complete turnkey delivery with partner financing coordination on-site.
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-4 pt-0.5 sm:pt-2">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-4 pt-0.5 sm:pt-2 w-full md:w-auto">
                       <button
                         onClick={() => onOpenEnquiry("Immediate Delivery Enquiry")}
                         className="inline-flex items-center gap-2 px-3.5 sm:px-7 py-2 sm:py-3.5 rounded-full font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 transition shadow-xl shadow-emerald-500/20 cursor-pointer"
@@ -679,12 +679,12 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                         <ArrowRight className="w-4 h-4" />
                       </button>
 
-                        <a
-                          href="#contact"
-                          className="px-3.5 sm:px-6 py-2 sm:py-3.5 rounded-full font-medium text-xs sm:text-sm text-slate-200 bg-white/10 hover:bg-white/15 border border-white/10 backdrop-blur-md transition flex items-center gap-2"
-                        >
-                          <span>Visit Showroom</span>
-                        </a>
+                      <a
+                        href="#contact"
+                        className="px-3.5 sm:px-6 py-2 sm:py-3.5 rounded-full font-medium text-xs sm:text-sm text-slate-200 bg-white/10 hover:bg-white/15 border border-white/10 backdrop-blur-md transition flex items-center gap-2"
+                      >
+                        <span>Visit Showroom</span>
+                      </a>
                     </div>
                   </motion.div>
                 )}
