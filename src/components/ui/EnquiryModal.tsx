@@ -137,9 +137,9 @@ export default function EnquiryModal({
                   className="w-full px-4 py-2.5 rounded-xl bg-[#0B1325] border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition"
                 >
                   <option value="E-Rickshaw Purchase">New E-Rickshaw Purchase</option>
-                  <option value="Vehicle: Kritika Crimson Super DX">Kritika Crimson Super DX (Ruby)</option>
-                  <option value="Vehicle: Kritika Jade Commuter Pro">Kritika Jade Commuter Pro (Teal)</option>
-                  <option value="Vehicle: Kritika Cobalt Voyager Max">Kritika Cobalt Voyager Max (Blue)</option>
+                  <option value="Vehicle: Max Moter Elite">Max Moter Elite (Signature Series)</option>
+                  <option value="Vehicle: Apsara Comfort">Apsara Comfort (Passenger Commuter)</option>
+                  <option value="Vehicle: Apsara Loader">Apsara Loader (Heavy Cargo)</option>
                   <option value="Custom Accessories Package">Optional Accessories Package</option>
                   <option value="Financing Assistance Enquiry">Vehicle Financing Assistance</option>
                   <option value="Showroom Visit / Test Ride">Showroom Visit & Test Ride</option>

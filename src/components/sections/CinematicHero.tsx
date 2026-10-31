@@ -374,7 +374,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                   >
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-cyan-400">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <span>OFFICIAL E-RICKSHAW SHOWROOM • ASSAM</span>
+                      <span>RITTIKA ENTERPRISES • DHEMAJI</span>
                     </div>
 
                     {/* 
@@ -540,7 +540,7 @@ export default function CinematicHero({ onOpenEnquiry }: CinematicHeroProps) {
                     </p>
 
                     <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed font-normal">
-                      Inspect our Ruby Red, Emerald Teal, and Cobalt Blue models on the showroom floor at Pegu Bazaar. Complete turnkey delivery with partner financing coordination on-site.
+                      Inspect our Max Moter Elite, Apsara Comfort, and Apsara Loader models on the showroom floor at Pegu Bazaar. Complete turnkey delivery with partner financing coordination on-site.
                     </p>
 
                     <div className="flex flex-wrap items-center gap-4 pt-2">

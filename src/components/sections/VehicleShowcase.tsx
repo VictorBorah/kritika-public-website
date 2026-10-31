@@ -2,9 +2,21 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Sparkles, Check, ArrowRight, BatteryCharging, Gauge, Users, Weight, Wrench } from "lucide-react";
+import {
+  Sparkles,
+  Check,
+  ArrowRight,
+  BatteryCharging,
+  Gauge,
+  Users,
+  Weight,
+  Wrench,
+  Maximize2,
+  ZoomIn,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { VEHICLE_MODELS, VehicleModel } from "@/data/vehicles";
+import VehicleLightbox from "@/components/ui/VehicleLightbox";
 
 interface VehicleShowcaseProps {
   onOpenEnquiry: (vehicleName: string) => void;
@@ -12,6 +24,14 @@ interface VehicleShowcaseProps {
 
 export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps) {
   const [selectedModel, setSelectedModel] = useState<VehicleModel>(VEHICLE_MODELS[0]);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxModelId, setLightboxModelId] = useState<string>(VEHICLE_MODELS[0].id);
+
+  const handleOpenLightbox = (model: VehicleModel) => {
+    setSelectedModel(model);
+    setLightboxModelId(model.id);
+    setIsLightboxOpen(true);
+  };
 
   return (
     <section id="vehicles" className="py-20 sm:py-28 relative bg-[#030508] border-t border-white/10">
@@ -71,19 +91,30 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
           className="dark-automotive-card p-6 sm:p-10 rounded-3xl mb-12"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Visual Vehicle Viewer */}
+            {/* Visual Vehicle Viewer with Interactive Lightbox Trigger */}
             <div className="lg:col-span-6 relative flex flex-col items-center">
-              <div className="relative w-full h-64 sm:h-80 md:h-96 flex items-center justify-center">
+              <div
+                onClick={() => handleOpenLightbox(selectedModel)}
+                className="group relative w-full h-64 sm:h-80 md:h-96 flex items-center justify-center cursor-pointer rounded-2xl bg-black/25 border border-white/5 hover:border-cyan-400/40 transition-all duration-300 p-4 overflow-hidden"
+                title="Click to view 2000×2000 px High-Res Studio Shot"
+              >
                 <Image
                   src={selectedModel.image}
                   alt={selectedModel.name}
                   fill
-                  className="object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)] transition-all duration-500 hover:scale-105"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.85)] transition-all duration-500 group-hover:scale-105"
                 />
+
+                {/* Floating Lightbox Hint Badge */}
+                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-white text-xs font-mono shadow-xl transition-all duration-200 group-hover:scale-105 group-hover:border-cyan-400/60 group-hover:text-cyan-300">
+                  <Maximize2 className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Click to Expand [2000×2000 HD]</span>
+                </div>
               </div>
 
               {/* Color & Series Chip */}
-              <div className="mt-4 flex items-center gap-3">
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
                 <span className="text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300 flex items-center gap-2">
                   <span
                     className="w-2.5 h-2.5 rounded-full ring-2 ring-white/20"
@@ -94,6 +125,13 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
                 <span className="text-xs font-mono px-3 py-1 rounded-full bg-white/5 text-emerald-400 border border-white/10">
                   {selectedModel.badge}
                 </span>
+                <button
+                  onClick={() => handleOpenLightbox(selectedModel)}
+                  className="text-xs font-mono px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-400/30 hover:bg-cyan-500/20 transition flex items-center gap-1.5 cursor-pointer"
+                >
+                  <ZoomIn className="w-3 h-3" />
+                  <span>Open Lightbox</span>
+                </button>
               </div>
             </div>
 
@@ -140,7 +178,7 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
                 <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-center">
                   <Users className="w-4 h-4 text-amber-400 mx-auto mb-1" />
                   <span className="block text-xs font-bold text-white font-mono">
-                    4 + 1
+                    {selectedModel.specs.seating.includes("1 Driver +") ? "Cargo" : "4 + 1"}
                   </span>
                   <span className="text-[10px] text-slate-400">Seating Cap</span>
                 </div>
@@ -169,19 +207,27 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
 
+                <button
+                  onClick={() => handleOpenLightbox(selectedModel)}
+                  className="w-full sm:w-auto px-5 py-3.5 rounded-xl font-medium text-xs sm:text-sm text-cyan-300 hover:text-white bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-400/30 transition text-center flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Maximize2 className="w-4 h-4 text-cyan-400" />
+                  <span>View 2000×2000 HD</span>
+                </button>
+
                 <a
                   href="#accessories"
                   className="w-full sm:w-auto px-5 py-3.5 rounded-xl font-medium text-xs sm:text-sm text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition text-center flex items-center justify-center gap-2"
                 >
                   <Wrench className="w-4 h-4 text-cyan-400" />
-                  <span>Customize with Accessories</span>
+                  <span>Accessories</span>
                 </a>
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* 3 Fleet Cards Grid */}
+        {/* 3 Fleet Cards Grid — Each with Resized Uncropped Tuk-Tuk Image & Lightbox */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
           {VEHICLE_MODELS.map((model, idx) => (
             <motion.div
@@ -201,7 +247,7 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
               }`}
             >
               <div>
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-3">
                   <span
                     className="w-3.5 h-3.5 rounded-full ring-2 ring-white/20"
                     style={{ backgroundColor: model.colorHex }}
@@ -214,7 +260,30 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
                 <h4 className="text-lg font-bold font-heading text-white">{model.name}</h4>
                 <p className="text-xs text-slate-400 mt-1 line-clamp-2">{model.tagline}</p>
 
-                <div className="my-4 py-3 border-y border-white/5 space-y-2 text-xs font-mono text-slate-300">
+                {/* Resized Tuk-Tuk Image Preview with Lightbox Trigger */}
+                <div
+                  onClick={() => handleOpenLightbox(model)}
+                  className="group relative w-full h-44 sm:h-48 my-4 rounded-xl bg-black/40 border border-white/10 hover:border-cyan-400/50 flex items-center justify-center cursor-pointer transition-all duration-300 overflow-hidden"
+                  title={`Click to view ${model.name} in 2000×2000 px HD`}
+                >
+                  <Image
+                    src={model.image}
+                    alt={model.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-contain p-3 drop-shadow-[0_10px_20px_rgba(0,0,0,0.85)] transition-transform duration-500 group-hover:scale-105"
+                  />
+
+                  {/* Hover Overlay with Lightbox indicator */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-2.5">
+                    <span className="text-[11px] font-mono font-medium text-white px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md border border-white/20 flex items-center gap-1.5 shadow-lg text-cyan-300">
+                      <Maximize2 className="w-3 h-3 text-cyan-400" />
+                      <span>View 2000×2000 HD</span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="my-3 py-3 border-y border-white/5 space-y-2 text-xs font-mono text-slate-300">
                   <div className="flex justify-between">
                     <span className="text-slate-500">Motor:</span>
                     <span className="text-white">{model.specs.motor.split(" ")[0]}</span>
@@ -230,20 +299,35 @@ export default function VehicleShowcase({ onOpenEnquiry }: VehicleShowcaseProps)
                 </div>
               </div>
 
-              <button
-                onClick={() => {
-                  setSelectedModel(model);
-                  onOpenEnquiry(model.name);
-                }}
-                className="w-full mt-2 py-2.5 px-4 rounded-xl text-xs font-mono font-medium text-slate-200 bg-white/5 hover:bg-cyan-500/15 hover:text-cyan-300 border border-white/10 hover:border-cyan-400/30 transition flex items-center justify-center gap-1.5"
-              >
-                <span>Instant Showroom Quote</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+              <div className="pt-2 space-y-2">
+                <button
+                  onClick={() => {
+                    setSelectedModel(model);
+                    onOpenEnquiry(model.name);
+                  }}
+                  className="w-full py-2.5 px-4 rounded-xl text-xs font-mono font-medium text-slate-200 bg-white/5 hover:bg-cyan-500/15 hover:text-cyan-300 border border-white/10 hover:border-cyan-400/30 transition flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <span>Instant Showroom Quote</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* 2000×2000 HD Lightbox Modal */}
+      <VehicleLightbox
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        models={VEHICLE_MODELS}
+        currentModelId={lightboxModelId}
+        onSelectModel={(model) => {
+          setLightboxModelId(model.id);
+          setSelectedModel(model);
+        }}
+        onOpenEnquiry={onOpenEnquiry}
+      />
     </section>
   );
 }
