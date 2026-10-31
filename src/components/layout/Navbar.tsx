@@ -137,7 +137,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                   </div>
                   <div>
                     <span className="text-sm font-bold text-white font-heading">KRITIKA</span>
-                    <span className="block text-[10px] text-slate-400 font-mono">Dhemaji Showroom</span>
+                    <span className="block text-[10px] text-slate-400 font-mono">Micro Foundation</span>
                   </div>
                 </div>
                 <button
