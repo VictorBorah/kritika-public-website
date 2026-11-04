@@ -227,7 +227,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                 )}
               </div>
 
-              {/* 3. Company (Multi-level Dropdown: Why Us + About Us) */}
+              {/* 3. Company (Multi-level Dropdown: About Us, Why Us, Legal Documents) */}
               <div
                 className="relative"
                 onMouseEnter={() => handleMouseEnter("company")}
@@ -237,7 +237,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                   type="button"
                   onClick={() => setActiveDropdown(activeDropdown === "company" ? null : "company")}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 font-mono tracking-wide flex items-center gap-1.5 cursor-pointer ${
-                    activeDropdown === "company"
+                    activeDropdown === "company" || isDocumentsActive
                       ? "bg-cyan-500/15 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]"
                       : "text-slate-300 hover:text-white hover:bg-white/5"
                   }`}
@@ -254,8 +254,26 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                 {/* Dropdown Menu */}
                 {activeDropdown === "company" && (
                   <div
-                    className="absolute top-full left-0 mt-2 w-64 rounded-2xl bg-[#070C18]/95 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/80 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                    className="absolute top-full left-0 mt-2 w-72 rounded-2xl bg-[#070C18]/95 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/80 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                   >
+                    <Link
+                      href={isHomePage ? "#about" : "/#about"}
+                      onClick={() => setActiveDropdown(null)}
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <Building2 className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
+                          About Us
+                        </div>
+                        <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">
+                          Our mission, leadership &amp; vision
+                        </span>
+                      </div>
+                    </Link>
+
                     <Link
                       href={isHomePage ? "#why-choose-us" : "/#why-choose-us"}
                       onClick={() => setActiveDropdown(null)}
@@ -275,19 +293,24 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                     </Link>
 
                     <Link
-                      href={isHomePage ? "#about" : "/#about"}
+                      href="/documents"
                       onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition group"
+                      className={`flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition group ${
+                        isDocumentsActive ? "bg-cyan-500/10 border border-cyan-400/30" : ""
+                      }`}
                     >
-                      <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                        <Building2 className="w-4 h-4" />
+                      <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-400/30 text-violet-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <FileText className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
-                          About Us
+                        <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
+                          <span>Legal Documents</span>
+                          <span className="text-[8px] px-1 py-0.2 rounded font-mono font-bold bg-violet-500/20 text-violet-400 border border-violet-500/30">
+                            Verified
+                          </span>
                         </div>
                         <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">
-                          Our mission, leadership &amp; vision
+                          CIN, Sec. 8 License, MoA, AoA, PAN &amp; Bank
                         </span>
                       </div>
                     </Link>
@@ -304,20 +327,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                 <span>Financing</span>
               </Link>
 
-              {/* 5. Documents (New Page Link) */}
-              <Link
-                href="/documents"
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 font-mono tracking-wide flex items-center gap-1.5 ${
-                  isDocumentsActive
-                    ? "bg-cyan-500/15 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]"
-                    : "text-slate-300 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                <FileText className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Documents</span>
-              </Link>
-
-              {/* 6. Contact */}
+              {/* 5. Contact */}
               <Link
                 href={isHomePage ? "#contact" : "/#contact"}
                 className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 font-mono tracking-wide text-slate-300 hover:text-white hover:bg-white/5"
@@ -478,6 +488,13 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                   {mobileCompanyOpen && (
                     <div className="pl-6 pr-2 py-1 space-y-1 border-t border-white/5 bg-black/20">
                       <Link
+                        href={isHomePage ? "#about" : "/#about"}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block px-3 py-2 rounded-lg text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5 transition"
+                      >
+                        • About Us
+                      </Link>
+                      <Link
                         href={isHomePage ? "#why-choose-us" : "/#why-choose-us"}
                         onClick={() => setMobileMenuOpen(false)}
                         className="block px-3 py-2 rounded-lg text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5 transition"
@@ -485,11 +502,15 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                         • Why Choose Us
                       </Link>
                       <Link
-                        href={isHomePage ? "#about" : "/#about"}
+                        href="/documents"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block px-3 py-2 rounded-lg text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5 transition"
+                        className={`block px-3 py-2 rounded-lg text-xs font-mono transition ${
+                          isDocumentsActive
+                            ? "text-cyan-300 font-bold bg-cyan-500/10"
+                            : "text-slate-300 hover:text-white hover:bg-white/5"
+                        }`}
                       >
-                        • About Us
+                        • Legal Documents
                       </Link>
                     </div>
                   )}
@@ -504,23 +525,6 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                   <div className="flex items-center gap-2">
                     <BadgePercent className="w-4 h-4 text-emerald-400" />
                     <span>Financing</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-slate-500" />
-                </Link>
-
-                {/* Documents */}
-                <Link
-                  href="/documents"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition ${
-                    isDocumentsActive
-                      ? "bg-cyan-500/15 text-cyan-300 font-bold border border-cyan-400/30"
-                      : "text-slate-200 hover:text-cyan-400 hover:bg-white/5"
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-cyan-400" />
-                    <span>Documents</span>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </Link>

@@ -31,7 +31,7 @@ export default function Footer() {
                   KRITIKA MICRO FOUNDATION
                 </span>
                 <span className="text-[10px] font-mono tracking-widest text-slate-400 uppercase">
-                  E-Rickshaw Showroom & Dealership
+                  E-Rickshaw Dealer &amp; Financer
                 </span>
               </div>
             </Link>
