@@ -8,3 +8,5 @@ dist/
 *.tsbuildinfo
 
 
+
+/legal_docs/
