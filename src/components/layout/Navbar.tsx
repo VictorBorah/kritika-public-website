@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, Phone, Sparkles, ChevronRight, Zap } from "lucide-react";
 
 interface NavbarProps {
@@ -10,6 +12,8 @@ interface NavbarProps {
 export default function Navbar({ onOpenEnquiry }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,13 +33,14 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
   }, [mobileMenuOpen]);
 
   const navLinks = [
-    { label: "Home", href: "#hero" },
-    { label: "Why Us", href: "#why-choose-us" },
-    { label: "E-Rickshaws", href: "#vehicles" },
-    { label: "Accessories", href: "#accessories" },
-    { label: "Financing", href: "#financing" },
-    { label: "About Us", href: "#about" },
-    { label: "Contact", href: "#contact" },
+    { label: "Home", href: isHomePage ? "#hero" : "/" },
+    { label: "Products", href: "/products", isRoute: true, badge: "Catalog" },
+    { label: "Why Us", href: isHomePage ? "#why-choose-us" : "/#why-choose-us" },
+    { label: "E-Rickshaws", href: isHomePage ? "#vehicles" : "/#vehicles" },
+    { label: "Accessories", href: isHomePage ? "#accessories" : "/#accessories" },
+    { label: "Financing", href: isHomePage ? "#financing" : "/#financing" },
+    { label: "About Us", href: isHomePage ? "#about" : "/#about" },
+    { label: "Contact", href: isHomePage ? "#contact" : "/#contact" },
   ];
 
   return (
@@ -50,8 +55,8 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo / Branding */}
-            <a
-              href="#hero"
+            <Link
+              href="/"
               className="flex items-center gap-3 group focus:outline-none"
             >
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 via-cyan-400 to-violet-600 p-[1.5px] transition-transform duration-300 group-hover:scale-105">
@@ -72,19 +77,31 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                   Micro Foundation • Dhemaji
                 </span>
               </div>
-            </a>
+            </Link>
 
             {/* Desktop Navigation Links */}
             <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all duration-200 font-mono tracking-wide"
-                >
-                  {link.label}
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = link.isRoute && pathname === link.href;
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 font-mono tracking-wide flex items-center gap-1.5 ${
+                      isActive
+                        ? "bg-cyan-500/15 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]"
+                        : "text-slate-300 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    <span>{link.label}</span>
+                    {link.badge && (
+                      <span className="text-[9px] px-1 py-0.2 rounded font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                        {link.badge}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
             </nav>
 
             {/* Right Action Desk */}
@@ -99,7 +116,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
 
               <button
                 onClick={() => onOpenEnquiry("General Showroom Enquiry")}
-                className="px-4 py-2 rounded-full text-xs font-semibold font-mono tracking-wide text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 border border-emerald-400/30 transition-all flex items-center gap-1.5 shadow-md shadow-emerald-500/20"
+                className="px-4 py-2 rounded-full text-xs font-semibold font-mono tracking-wide text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 border border-emerald-400/30 transition-all flex items-center gap-1.5 shadow-md shadow-emerald-500/20 cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5 text-white" />
                 <span>Enquire Now</span>
@@ -109,7 +126,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 border border-white/10 transition"
+              className="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 border border-white/10 transition cursor-pointer"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -142,7 +159,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                 </div>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 cursor-pointer"
                   aria-label="Close Mobile Menu"
                 >
                   <X className="w-5 h-5" />
@@ -151,17 +168,31 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
 
               {/* Mobile Links */}
               <nav className="mt-6 flex flex-col space-y-1">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:text-cyan-400 hover:bg-white/5 transition"
-                  >
-                    <span>{link.label}</span>
-                    <ChevronRight className="w-4 h-4 text-slate-500" />
-                  </a>
-                ))}
+                {navLinks.map((link) => {
+                  const isActive = link.isRoute && pathname === link.href;
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition ${
+                        isActive
+                          ? "bg-cyan-500/15 text-cyan-300 font-bold border border-cyan-400/30"
+                          : "text-slate-200 hover:text-cyan-400 hover:bg-white/5"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>{link.label}</span>
+                        {link.badge && (
+                          <span className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                            {link.badge}
+                          </span>
+                        )}
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-500" />
+                    </Link>
+                  );
+                })}
               </nav>
             </div>
 
@@ -180,7 +211,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                   setMobileMenuOpen(false);
                   onOpenEnquiry("Mobile Menu Enquiry");
                 }}
-                className="w-full py-3 px-4 rounded-xl text-xs font-semibold font-mono text-[#030508] bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-300 hover:brightness-110 transition shadow-lg shadow-cyan-500/20"
+                className="w-full py-3 px-4 rounded-xl text-xs font-semibold font-mono text-[#030508] bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-300 hover:brightness-110 transition shadow-lg shadow-cyan-500/20 cursor-pointer"
               >
                 Enquire Now
               </button>
@@ -191,4 +222,3 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
     </>
   );
 }
-
