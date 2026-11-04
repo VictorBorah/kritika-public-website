@@ -1,0 +1,16 @@
+The 48V/60A E-Rickshaw Controller (CY) is designed to manage motor operation in compatible 48V E-Rickshaw and electric three-wheeler systems. It works between the battery, throttle, and motor, processing the driver's input and regulating electrical power delivered to the motor for controlled acceleration and speed.
+
+With a 48 -60V system and 60A current rating, this controller is suitable for compatible E-Rickshaw applications requiring dependable motor control and responsive throttle operation. It can be used for EV assembly, replacement, servicing, and maintenance.
+
+Key Features
+Brand: CY
+Voltage: 48V
+Current Rating: 60A
+Product Type: E-Rickshaw Motor Controller
+Designed for compatible 48V/60V EV systems
+Supports controlled acceleration and speed regulation
+Works with compatible throttle and motor systems
+Suitable for E-Rickshaw and electric three-wheeler applications
+Useful for replacement and maintenance requirements
+Compatibility Note
+Before installation, verify the motor power, operating voltage, current rating, Hall/phase configuration, connector type, wiring, throttle compatibility, and protection functions against the manufacturer's specifications. Proper matching of the controller with the complete EV system is important for safe and reliable operation.

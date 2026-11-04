@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useCart } from "@/context/CartContext";
 import {
   Menu,
   X,
@@ -18,7 +20,10 @@ import {
   ShieldCheck,
   FileText,
   BadgePercent,
-  MessageSquare
+  MessageSquare,
+  ShoppingCart,
+  User as UserIcon,
+  LogOut
 } from "lucide-react";
 
 interface NavbarProps {
@@ -35,6 +40,8 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
   const isHomePage = pathname === "/";
+
+  const { totalItems, currentUser, logout } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,6 +77,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
 
   const isProductsActive = pathname.startsWith("/products");
   const isDocumentsActive = pathname.startsWith("/documents") || pathname.startsWith("/legal-documents");
+  const isCartActive = pathname.startsWith("/cart");
 
   return (
     <>
@@ -135,7 +143,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                 >
                   <span>Products</span>
                   <span className="text-[9px] px-1 py-0.2 rounded font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                    Catalog
+                    Store
                   </span>
                   <ChevronDown
                     className={`w-3.5 h-3.5 transition-transform duration-200 ${
@@ -159,13 +167,13 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                       </div>
                       <div>
                         <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
-                          <span>All Products</span>
+                          <span>All Products &amp; Store</span>
                           <span className="text-[8px] px-1 py-0.2 rounded font-mono font-bold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
-                            Explore
+                            Buy Online
                           </span>
                         </div>
                         <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">
-                          Full catalog with vehicles, loaders &amp; spares
+                          Motors, controllers, batteries &amp; spares
                         </span>
                       </div>
                     </Link>
@@ -189,7 +197,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                     </Link>
 
                     <Link
-                      href={isHomePage ? "#accessories" : "/#accessories"}
+                      href="/products#accessories"
                       onClick={() => setActiveDropdown(null)}
                       className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition group"
                     >
@@ -198,10 +206,10 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                       </div>
                       <div>
                         <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
-                          Accessories
+                          Accessories (8 Items)
                         </div>
                         <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">
-                          Genuine spares, parts &amp; PAN-India items
+                          PAN-India shippable genuine spares
                         </span>
                       </div>
                     </Link>
@@ -336,8 +344,49 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
               </Link>
             </nav>
 
-            {/* Right Action Desk */}
-            <div className="hidden sm:flex items-center gap-3">
+            {/* Right Action Desk: Cart + Phone + Enquiry / Profile */}
+            <div className="hidden sm:flex items-center gap-2.5">
+              {/* E-Commerce Cart Trigger */}
+              <Link
+                href="/cart"
+                className={`relative px-3 py-1.5 rounded-xl font-mono text-xs transition flex items-center gap-2 border ${
+                  isCartActive
+                    ? "bg-cyan-500/20 text-cyan-300 border-cyan-400/40 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+                    : "bg-white/[0.03] hover:bg-white/10 text-slate-200 border-white/10"
+                }`}
+                title="View Shopping Cart"
+              >
+                <div className="relative">
+                  <ShoppingCart className="w-4 h-4 text-cyan-400" />
+                  {totalItems > 0 && (
+                    <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-emerald-400 text-[#030508] font-bold text-[9px] flex items-center justify-center animate-pulse">
+                      {totalItems}
+                    </span>
+                  )}
+                </div>
+                <span className="hidden md:inline font-semibold">Cart</span>
+              </Link>
+
+              {/* Customer Account Avatar / Status */}
+              {currentUser && (
+                <div className="flex items-center gap-2 pl-1 border-l border-white/10">
+                  {currentUser.photoURL ? (
+                    <div className="w-7 h-7 rounded-full relative overflow-hidden border border-cyan-400/50" title={currentUser.displayName || currentUser.email || ""}>
+                      <Image
+                        src={currentUser.photoURL}
+                        alt="Profile"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-xs font-bold font-mono">
+                      {currentUser.displayName ? currentUser.displayName[0] : "U"}
+                    </div>
+                  )}
+                </div>
+              )}
+
               <a
                 href="tel:+919954367393"
                 className="hidden xl:flex items-center gap-1.5 text-xs font-mono text-slate-300 hover:text-cyan-400 transition-colors py-1.5 px-3 rounded-lg border border-white/5 bg-white/[0.02]"
@@ -355,14 +404,29 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
               </button>
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 border border-white/10 transition cursor-pointer"
-              aria-label="Toggle Navigation Menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            {/* Mobile Menu Button + Cart */}
+            <div className="flex items-center gap-2 lg:hidden">
+              <Link
+                href="/cart"
+                className="p-2 rounded-xl text-slate-300 hover:text-white bg-white/5 border border-white/10 relative"
+                aria-label="View Shopping Cart"
+              >
+                <ShoppingCart className="w-5 h-5 text-cyan-400" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 text-[#030508] font-bold text-[9px] flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </Link>
+
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 border border-white/10 transition cursor-pointer"
+                aria-label="Toggle Navigation Menu"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -398,8 +462,23 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                 </button>
               </div>
 
+              {/* Cart Banner in Drawer */}
+              <Link
+                href="/cart"
+                onClick={() => setMobileMenuOpen(false)}
+                className="mt-4 p-3 rounded-xl bg-gradient-to-r from-cyan-500/15 to-emerald-500/15 border border-cyan-400/30 flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2.5">
+                  <ShoppingCart className="w-4 h-4 text-cyan-400" />
+                  <span className="text-xs font-mono font-bold text-white">Shopping Cart</span>
+                </div>
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-400 text-[#030508]">
+                  {totalItems} Item{totalItems !== 1 ? "s" : ""}
+                </span>
+              </Link>
+
               {/* Mobile Links */}
-              <nav className="mt-6 flex flex-col space-y-1">
+              <nav className="mt-4 flex flex-col space-y-1">
                 {/* Home */}
                 <Link
                   href={isHomePage ? "#hero" : "/"}
@@ -418,9 +497,9 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                   >
                     <div className="flex items-center gap-2">
                       <Package className="w-4 h-4 text-cyan-400" />
-                      <span>Products</span>
+                      <span>Products &amp; Store</span>
                       <span className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                        Catalog
+                        Buy Online
                       </span>
                     </div>
                     <ChevronDown
@@ -451,11 +530,11 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
                         • E-Rickshaws
                       </Link>
                       <Link
-                        href={isHomePage ? "#accessories" : "/#accessories"}
+                        href="/products#accessories"
                         onClick={() => setMobileMenuOpen(false)}
                         className="block px-3 py-2 rounded-lg text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5 transition"
                       >
-                        • Accessories (PAN India)
+                        • Accessories (8 Spares)
                       </Link>
                       <Link
                         href="/products#loaders"
@@ -546,6 +625,25 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
 
             {/* Drawer Bottom Actions */}
             <div className="pt-6 border-t border-white/10 space-y-3">
+              {currentUser && (
+                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-xs font-bold font-mono">
+                      {currentUser.displayName ? currentUser.displayName[0] : "U"}
+                    </div>
+                    <span className="text-xs font-mono text-slate-300 truncate max-w-[140px]">
+                      {currentUser.email}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => logout()}
+                    className="text-[11px] font-mono text-rose-400 hover:underline"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+
               <a
                 href="tel:+919954367393"
                 className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-mono text-white bg-white/5 border border-white/10 hover:bg-white/10 transition"

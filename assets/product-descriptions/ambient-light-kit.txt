@@ -1,0 +1,6 @@
+This is a LED light kit for E-Rickshaws that works off 12v 60A DC Supply.
+It has 5 meters of wire that covers most interiors
+Has a cool glow without heat. 
+The lights are Safe to touch
+Flexible wire bends around dashboard and trim
+Kit has 6 pieces of 6 led RGB Trim lights for attcahing on exterior
