@@ -281,7 +281,7 @@ export default function TermsAndConditionsPage() {
                   <strong>Third-Party Financier Recovery:</strong> The financier reserves the full contractual and statutory right to recover the financed amount along with interest, penalty charges, legal costs, and recovery expenses. <strong>Kritika Micro Foundation plays zero role, bears no liability, and exercises no interference in the recovery, repossession, or legal proceedings initiated by the financier.</strong>
                 </li>
                 <li>
-                  <strong>In-House Micro Credit Recovery:</strong> In cases where Kritika Micro Foundation directly self-finances a commercial vehicle or carrier through its in-house micro-credit division, <strong>Kritika Micro Foundation shall be exclusively responsible and contractually empowered to recover all financed amounts, accrued interest, delayed payment fees, and associated legal recovery expenses</strong> in accordance with the executed loan deed.
+                  <strong>In-House Micro Credit Recovery:</strong> In cases where Kritika Micro Foundation directly self-finances a commercial vehicle or carrier through its in-house micro-credit facilities, <strong>Kritika Micro Foundation shall be exclusively responsible and contractually empowered to recover all financed amounts, accrued interest, delayed payment fees, and associated legal recovery expenses</strong> in accordance with the executed loan deed.
                 </li>
               </ul>
             </div>
@@ -307,6 +307,9 @@ export default function TermsAndConditionsPage() {
                 </li>
                 <li>
                   <strong>PAN-India Shippable Feasible Goods:</strong> Tangible accessories, carriers, heavy cargo flatbeds, lighting harnesses, digital telemetry clusters, audio packages, and weather protective covers can be ordered and dispatched nationwide across India via standard freight and courier channels.
+                </li>
+                <li>
+                  <strong>Online Accessories Purchase &amp; Original Packaging Obligation:</strong> In case of Online Purchase of accessories and in case of eligible returns, customers are obliged to retain the original box of the part or accessory and other components as received and ensure they are in the box to be returned. Returns or exchanges cannot be processed if original packaging, protective foam, tags, or components are damaged or missing.
                 </li>
               </ul>
             </div>

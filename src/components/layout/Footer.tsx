@@ -176,6 +176,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/documents" className="hover:text-white transition-colors flex items-center gap-1.5">
+                  <FileText className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Legal Documents</span>
+                </Link>
+              </li>
+              <li>
                 <Link href="/terms#financing-recovery" className="hover:text-white transition-colors">
                   Financing & Loan Recovery
                 </Link>

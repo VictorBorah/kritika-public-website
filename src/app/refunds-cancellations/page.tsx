@@ -103,7 +103,7 @@ export default function RefundsCancellationsPage() {
                 <ul className="space-y-1.5 text-xs sm:text-sm text-slate-300 leading-relaxed list-disc list-inside">
                   <li><strong>Financed Commercial Products:</strong> Refunds or order cancellations are strictly <u>not permitted</u> once financing dockets and delivery deeds are executed.</li>
                   <li><strong>Complete E-Rickshaws:</strong> We do <u>not</u> ship complete assembled E-Rickshaws out-of-station. Assembled vehicles are available solely via showroom pickup or authorized local delivery from our flagship showroom at Pegu Bazaar, Dhemaji, Assam.</li>
-                  <li><strong>Tangible Accessories:</strong> Feasible retail accessories, carriers, loaders, and components are eligible for PAN-India shipment and returns as per policy guidelines.</li>
+                  <li><strong>Tangible Accessories:</strong> Feasible retail accessories, batteries, couplers, motor-controllers, carriers, loaders, and components are eligible for PAN-India shipment and returns as per policy guidelines.</li>
                 </ul>
               </div>
             </div>
@@ -215,7 +215,7 @@ export default function RefundsCancellationsPage() {
                   <strong>Eligible Product Returns:</strong> Unused accessories in original factory packaging with all seal tags intact may be returned within <strong>7 days of delivery</strong> for exchange or refund.
                 </li>
                 <li>
-                  <strong>Non-Eligible Retail Items:</strong> Items that have been installed, wired, tampered with, cut, or damaged due to improper customer voltage application cannot be returned or refunded.
+                  <strong>Non-Eligible Retail Items:</strong> Used Products, items that have been installed, wired, tampered with, cut, or damaged due to improper customer voltage application cannot be returned or refunded. Vehicle Polishes, Scratch Removers as return or exchange possible only if factory cap seal is un-broken.
                 </li>
               </ul>
             </div>

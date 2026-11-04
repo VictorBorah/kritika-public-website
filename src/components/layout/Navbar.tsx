@@ -1,9 +1,25 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Phone, Sparkles, ChevronRight, Zap } from "lucide-react";
+import {
+  Menu,
+  X,
+  Phone,
+  Sparkles,
+  ChevronRight,
+  ChevronDown,
+  Zap,
+  Package,
+  Layers,
+  Truck,
+  Building2,
+  ShieldCheck,
+  FileText,
+  BadgePercent,
+  MessageSquare
+} from "lucide-react";
 
 interface NavbarProps {
   onOpenEnquiry: (interest?: string) => void;
@@ -12,6 +28,11 @@ interface NavbarProps {
 export default function Navbar({ onOpenEnquiry }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<"products" | "company" | null>(null);
+  const [mobileProductsOpen, setMobileProductsOpen] = useState(true);
+  const [mobileCompanyOpen, setMobileCompanyOpen] = useState(true);
+  
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
   const isHomePage = pathname === "/";
 
@@ -32,16 +53,23 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
     }
   }, [mobileMenuOpen]);
 
-  const navLinks = [
-    { label: "Home", href: isHomePage ? "#hero" : "/" },
-    { label: "Products", href: "/products", isRoute: true, badge: "Catalog" },
-    { label: "Why Us", href: isHomePage ? "#why-choose-us" : "/#why-choose-us" },
-    { label: "E-Rickshaws", href: isHomePage ? "#vehicles" : "/#vehicles" },
-    { label: "Accessories", href: isHomePage ? "#accessories" : "/#accessories" },
-    { label: "Financing", href: isHomePage ? "#financing" : "/#financing" },
-    { label: "About Us", href: isHomePage ? "#about" : "/#about" },
-    { label: "Contact", href: isHomePage ? "#contact" : "/#contact" },
-  ];
+  // Dropdown hover handlers with slight delay to prevent jitter
+  const handleMouseEnter = (menu: "products" | "company") => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+      dropdownTimeoutRef.current = null;
+    }
+    setActiveDropdown(menu);
+  };
+
+  const handleMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 180);
+  };
+
+  const isProductsActive = pathname.startsWith("/products");
+  const isDocumentsActive = pathname.startsWith("/documents") || pathname.startsWith("/legal-documents");
 
   return (
     <>
@@ -81,27 +109,221 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
 
             {/* Desktop Navigation Links */}
             <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-              {navLinks.map((link) => {
-                const isActive = link.isRoute && pathname === link.href;
-                return (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 font-mono tracking-wide flex items-center gap-1.5 ${
-                      isActive
-                        ? "bg-cyan-500/15 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]"
-                        : "text-slate-300 hover:text-white hover:bg-white/5"
+              {/* 1. Home */}
+              <Link
+                href={isHomePage ? "#hero" : "/"}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 font-mono tracking-wide text-slate-300 hover:text-white hover:bg-white/5"
+              >
+                Home
+              </Link>
+
+              {/* 2. Products (Multi-level Dropdown) */}
+              <div
+                className="relative"
+                onMouseEnter={() => handleMouseEnter("products")}
+                onMouseLeave={handleMouseLeave}
+              >
+                <button
+                  type="button"
+                  onClick={() => setActiveDropdown(activeDropdown === "products" ? null : "products")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 font-mono tracking-wide flex items-center gap-1.5 cursor-pointer ${
+                    isProductsActive || activeDropdown === "products"
+                      ? "bg-cyan-500/15 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]"
+                      : "text-slate-300 hover:text-white hover:bg-white/5"
+                  }`}
+                  aria-expanded={activeDropdown === "products"}
+                >
+                  <span>Products</span>
+                  <span className="text-[9px] px-1 py-0.2 rounded font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                    Catalog
+                  </span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                      activeDropdown === "products" ? "rotate-180 text-cyan-300" : "text-slate-400"
                     }`}
+                  />
+                </button>
+
+                {/* Dropdown Menu */}
+                {activeDropdown === "products" && (
+                  <div
+                    className="absolute top-full left-0 mt-2 w-72 rounded-2xl bg-[#070C18]/95 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/80 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                   >
-                    <span>{link.label}</span>
-                    {link.badge && (
-                      <span className="text-[9px] px-1 py-0.2 rounded font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                        {link.badge}
-                      </span>
-                    )}
-                  </Link>
-                );
-              })}
+                    <Link
+                      href="/products"
+                      onClick={() => setActiveDropdown(null)}
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <Layers className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
+                          <span>All Products</span>
+                          <span className="text-[8px] px-1 py-0.2 rounded font-mono font-bold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+                            Explore
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">
+                          Full catalog with vehicles, loaders &amp; spares
+                        </span>
+                      </div>
+                    </Link>
+
+                    <Link
+                      href={isHomePage ? "#vehicles" : "/#vehicles"}
+                      onClick={() => setActiveDropdown(null)}
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <Zap className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
+                          E-Rickshaws
+                        </div>
+                        <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">
+                          Passenger &amp; commercial EV fleet models
+                        </span>
+                      </div>
+                    </Link>
+
+                    <Link
+                      href={isHomePage ? "#accessories" : "/#accessories"}
+                      onClick={() => setActiveDropdown(null)}
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-violet-500/10 border border-violet-400/30 text-violet-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <Package className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
+                          Accessories
+                        </div>
+                        <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">
+                          Genuine spares, parts &amp; PAN-India items
+                        </span>
+                      </div>
+                    </Link>
+
+                    <Link
+                      href="/products#loaders"
+                      onClick={() => setActiveDropdown(null)}
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-400/30 text-amber-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <Truck className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
+                          Cargo Loaders
+                        </div>
+                        <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">
+                          High-payload commercial cargo carriers
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              {/* 3. Company (Multi-level Dropdown: Why Us + About Us) */}
+              <div
+                className="relative"
+                onMouseEnter={() => handleMouseEnter("company")}
+                onMouseLeave={handleMouseLeave}
+              >
+                <button
+                  type="button"
+                  onClick={() => setActiveDropdown(activeDropdown === "company" ? null : "company")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 font-mono tracking-wide flex items-center gap-1.5 cursor-pointer ${
+                    activeDropdown === "company"
+                      ? "bg-cyan-500/15 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]"
+                      : "text-slate-300 hover:text-white hover:bg-white/5"
+                  }`}
+                  aria-expanded={activeDropdown === "company"}
+                >
+                  <span>Company</span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                      activeDropdown === "company" ? "rotate-180 text-cyan-300" : "text-slate-400"
+                    }`}
+                  />
+                </button>
+
+                {/* Dropdown Menu */}
+                {activeDropdown === "company" && (
+                  <div
+                    className="absolute top-full left-0 mt-2 w-64 rounded-2xl bg-[#070C18]/95 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/80 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                  >
+                    <Link
+                      href={isHomePage ? "#why-choose-us" : "/#why-choose-us"}
+                      onClick={() => setActiveDropdown(null)}
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <ShieldCheck className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
+                          Why Choose Us
+                        </div>
+                        <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">
+                          5-layer dealership advantage &amp; guarantees
+                        </span>
+                      </div>
+                    </Link>
+
+                    <Link
+                      href={isHomePage ? "#about" : "/#about"}
+                      onClick={() => setActiveDropdown(null)}
+                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/5 transition group"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <Building2 className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
+                          About Us
+                        </div>
+                        <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">
+                          Our mission, leadership &amp; vision
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              {/* 4. Financing */}
+              <Link
+                href={isHomePage ? "#financing" : "/#financing"}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 font-mono tracking-wide text-slate-300 hover:text-white hover:bg-white/5 flex items-center gap-1.5"
+              >
+                <BadgePercent className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Financing</span>
+              </Link>
+
+              {/* 5. Documents (New Page Link) */}
+              <Link
+                href="/documents"
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 font-mono tracking-wide flex items-center gap-1.5 ${
+                  isDocumentsActive
+                    ? "bg-cyan-500/15 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.25)]"
+                    : "text-slate-300 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Documents</span>
+              </Link>
+
+              {/* 6. Contact */}
+              <Link
+                href={isHomePage ? "#contact" : "/#contact"}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 font-mono tracking-wide text-slate-300 hover:text-white hover:bg-white/5"
+              >
+                Contact
+              </Link>
             </nav>
 
             {/* Right Action Desk */}
@@ -145,7 +367,7 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
           />
 
           {/* Slide Drawer Panel */}
-          <div className="fixed right-0 top-0 bottom-0 w-full max-w-xs bg-[#070C18] border-l border-white/10 p-6 flex flex-col justify-between shadow-2xl">
+          <div className="fixed right-0 top-0 bottom-0 w-full max-w-xs bg-[#070C18] border-l border-white/10 p-6 flex flex-col justify-between shadow-2xl overflow-y-auto">
             <div>
               <div className="flex items-center justify-between pb-6 border-b border-white/10">
                 <div className="flex items-center gap-2">
@@ -168,31 +390,153 @@ export default function Navbar({ onOpenEnquiry }: NavbarProps) {
 
               {/* Mobile Links */}
               <nav className="mt-6 flex flex-col space-y-1">
-                {navLinks.map((link) => {
-                  const isActive = link.isRoute && pathname === link.href;
-                  return (
-                    <Link
-                      key={link.label}
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition ${
-                        isActive
-                          ? "bg-cyan-500/15 text-cyan-300 font-bold border border-cyan-400/30"
-                          : "text-slate-200 hover:text-cyan-400 hover:bg-white/5"
+                {/* Home */}
+                <Link
+                  href={isHomePage ? "#hero" : "/"}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:text-cyan-400 hover:bg-white/5 transition"
+                >
+                  <span>Home</span>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                </Link>
+
+                {/* Products Collapsible Group */}
+                <div className="rounded-xl border border-white/5 bg-white/[0.02] overflow-hidden my-1">
+                  <button
+                    onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
+                    className="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium text-white hover:bg-white/5 transition"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Package className="w-4 h-4 text-cyan-400" />
+                      <span>Products</span>
+                      <span className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                        Catalog
+                      </span>
+                    </div>
+                    <ChevronDown
+                      className={`w-4 h-4 text-slate-400 transition-transform ${
+                        mobileProductsOpen ? "rotate-180" : ""
                       }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span>{link.label}</span>
-                        {link.badge && (
-                          <span className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                            {link.badge}
-                          </span>
-                        )}
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-slate-500" />
-                    </Link>
-                  );
-                })}
+                    />
+                  </button>
+
+                  {mobileProductsOpen && (
+                    <div className="pl-6 pr-2 py-1 space-y-1 border-t border-white/5 bg-black/20">
+                      <Link
+                        href="/products"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`block px-3 py-2 rounded-lg text-xs font-mono transition ${
+                          isProductsActive
+                            ? "text-cyan-300 font-bold bg-cyan-500/10"
+                            : "text-slate-300 hover:text-white hover:bg-white/5"
+                        }`}
+                      >
+                        • All Products Catalog
+                      </Link>
+                      <Link
+                        href={isHomePage ? "#vehicles" : "/#vehicles"}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block px-3 py-2 rounded-lg text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5 transition"
+                      >
+                        • E-Rickshaws
+                      </Link>
+                      <Link
+                        href={isHomePage ? "#accessories" : "/#accessories"}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block px-3 py-2 rounded-lg text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5 transition"
+                      >
+                        • Accessories (PAN India)
+                      </Link>
+                      <Link
+                        href="/products#loaders"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block px-3 py-2 rounded-lg text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5 transition"
+                      >
+                        • Cargo Loaders
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Company Collapsible Group */}
+                <div className="rounded-xl border border-white/5 bg-white/[0.02] overflow-hidden my-1">
+                  <button
+                    onClick={() => setMobileCompanyOpen(!mobileCompanyOpen)}
+                    className="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium text-white hover:bg-white/5 transition"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Building2 className="w-4 h-4 text-emerald-400" />
+                      <span>Company</span>
+                    </div>
+                    <ChevronDown
+                      className={`w-4 h-4 text-slate-400 transition-transform ${
+                        mobileCompanyOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {mobileCompanyOpen && (
+                    <div className="pl-6 pr-2 py-1 space-y-1 border-t border-white/5 bg-black/20">
+                      <Link
+                        href={isHomePage ? "#why-choose-us" : "/#why-choose-us"}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block px-3 py-2 rounded-lg text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5 transition"
+                      >
+                        • Why Choose Us
+                      </Link>
+                      <Link
+                        href={isHomePage ? "#about" : "/#about"}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block px-3 py-2 rounded-lg text-xs font-mono text-slate-300 hover:text-white hover:bg-white/5 transition"
+                      >
+                        • About Us
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Financing */}
+                <Link
+                  href={isHomePage ? "#financing" : "/#financing"}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:text-cyan-400 hover:bg-white/5 transition"
+                >
+                  <div className="flex items-center gap-2">
+                    <BadgePercent className="w-4 h-4 text-emerald-400" />
+                    <span>Financing</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                </Link>
+
+                {/* Documents */}
+                <Link
+                  href="/documents"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition ${
+                    isDocumentsActive
+                      ? "bg-cyan-500/15 text-cyan-300 font-bold border border-cyan-400/30"
+                      : "text-slate-200 hover:text-cyan-400 hover:bg-white/5"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-cyan-400" />
+                    <span>Documents</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                </Link>
+
+                {/* Contact */}
+                <Link
+                  href={isHomePage ? "#contact" : "/#contact"}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-200 hover:text-cyan-400 hover:bg-white/5 transition"
+                >
+                  <div className="flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4 text-violet-400" />
+                    <span>Contact</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                </Link>
               </nav>
             </div>
 

@@ -222,8 +222,9 @@ export default function PrivacyPolicyPage() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 text-xs font-mono text-slate-300">
               <div className="p-4 rounded-xl bg-white/[0.02] border border-white/10 space-y-1">
-                <span className="text-slate-500 block uppercase">Officer Designation</span>
-                <span className="text-white font-semibold block">Grievance &amp; Compliance Officer</span>
+                <span className="text-slate-500 block uppercase">Officer Name &amp; Designation</span>
+                <span className="text-white font-semibold block text-sm">Arun Baruah</span>
+                <span className="text-cyan-400 text-xs block">Manager and Grievance &amp; Compliance Officer</span>
                 <span className="text-slate-400 block">Kritika Micro Foundation</span>
               </div>
               <div className="p-4 rounded-xl bg-white/[0.02] border border-white/10 space-y-1">
