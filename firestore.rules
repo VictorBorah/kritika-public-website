@@ -2,24 +2,46 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Helper: Determine if user is authorized as an administrator
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.token.email in ['prandipb85@gmail.com', 'victorborah@gmail.com'] ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
     // Customer profile & shipping addresses:
-    // Only the authenticated customer can read and update their own document
+    // User can read and update their own document, admins can read and manage all customers
     match /customers/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read, write: if isAdmin() || (request.auth != null && request.auth.uid == userId);
 
       match /{document=**} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
+        allow read, write: if isAdmin() || (request.auth != null && request.auth.uid == userId);
       }
     }
 
     // Orders collection:
-    // Authenticated customers can create and read their own orders
+    // Authenticated customers can create and read their own orders; admins have full management access
     match /orders/{orderId} {
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
-      allow update: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow read: if isAdmin() || (request.auth != null && resource.data.userId == request.auth.uid);
+      allow update: if isAdmin() || (request.auth != null && resource.data.userId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    // Settings collection (e.g. settings/products for availability regulation):
+    // Public can read availability; only admins can modify settings
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Admins registry collection:
+    // Signed-in users can check admin existence; only admins can modify
+    match /admins/{adminId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
     }
 
   }
 }
-

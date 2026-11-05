@@ -6,7 +6,7 @@ import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useCart } from "@/context/CartContext";
-import { ShippingAddress, recordOrderInFirestore } from "@/lib/firebase";
+import { ShippingAddress, recordOrderInFirestore, getProductAvailabilitySettings } from "@/lib/firebase";
 import { createCashfreeOrder, launchCashfreeCheckout, loadCashfreeSDK } from "@/lib/cashfree";
 import confetti from "canvas-confetti";
 import {
@@ -48,6 +48,22 @@ export default function CartPage() {
     saveAddress,
     showToast
   } = useCart();
+
+  // Product Availability State
+  const [availabilityMap, setAvailabilityMap] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    getProductAvailabilitySettings()
+      .then((map) => {
+        if (map && Object.keys(map).length > 0) {
+          setAvailabilityMap(map);
+        }
+      })
+      .catch((err) => console.warn("Failed to load product availability settings in cart:", err));
+  }, []);
+
+  const unavailableItems = items.filter((item) => availabilityMap[item.id] === false);
+  const hasUnavailableItems = unavailableItems.length > 0;
 
   // Checkout State
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
@@ -350,9 +366,17 @@ export default function CartPage() {
                             />
                           </div>
                           <div className="min-w-0">
-                            <span className="text-[10px] font-mono uppercase text-cyan-400 block">
-                              {item.category}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] font-mono uppercase text-cyan-400 block">
+                                {item.category}
+                              </span>
+                              {availabilityMap[item.id] === false && (
+                                <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 inline-flex items-center gap-1">
+                                  <AlertCircle className="w-3 h-3 text-rose-400" />
+                                  Unavailable
+                                </span>
+                              )}
+                            </div>
                             <h3 className="text-sm font-bold font-heading text-white truncate max-w-xs sm:max-w-sm">
                               {item.title}
                             </h3>
@@ -732,11 +756,26 @@ export default function CartPage() {
                     </div>
                   </div>
 
+                  {/* Warning banner if any cart items are unavailable */}
+                  {hasUnavailableItems && (
+                    <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono space-y-1.5">
+                      <div className="flex items-center gap-1.5 font-bold text-rose-200">
+                        <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                        <span>Action Required</span>
+                      </div>
+                      <p className="text-[11px] leading-relaxed text-rose-300/90 font-sans">
+                        {unavailableItems.length === 1
+                          ? `"${unavailableItems[0].title}" is currently marked as unavailable by the showroom. Please remove it from your cart to proceed.`
+                          : `${unavailableItems.length} items in your cart are currently marked as unavailable. Please remove them to proceed.`}
+                      </p>
+                    </div>
+                  )}
+
                   {/* Cashfree Checkout Action */}
                   <div className="space-y-3 pt-2">
                     <button
                       onClick={handleProceedToPayment}
-                      disabled={isProcessingPayment || !currentUser || !selectedAddress}
+                      disabled={isProcessingPayment || !currentUser || !selectedAddress || hasUnavailableItems}
                       className="w-full py-3.5 px-4 rounded-xl text-xs font-mono font-bold text-[#030508] bg-gradient-to-r from-emerald-400 via-cyan-400 to-teal-300 hover:brightness-110 shadow-lg shadow-cyan-500/20 transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isProcessingPayment ? (
@@ -744,6 +783,8 @@ export default function CartPage() {
                           <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
                           <span>Opening Cashfree Checkout...</span>
                         </>
+                      ) : hasUnavailableItems ? (
+                        <span>Remove Unavailable Items to Checkout</span>
                       ) : !currentUser ? (
                         <span>Sign In with Google to Checkout</span>
                       ) : !selectedAddress ? (
